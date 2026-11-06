@@ -8,7 +8,7 @@ class StrictBase(BaseModel):
         extra = Extra.forbid
 
 class RepoConnectRequest(StrictBase):
-    repo_url: str = Field(..., max_length=500, regex=r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/?$")
+    repo_url: str = Field(..., max_length=500, pattern=r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/?$")
     github_pat: str = Field(..., min_length=20)
     webhook_secret: Optional[str] = Field(default=None, min_length=16)
     trigger_initial_scan: bool = Field(default=True)
@@ -27,7 +27,7 @@ class RepositoryResponse(BaseModel):
     updated_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class RepositoryListResponse(BaseModel):
     items: List[RepositoryResponse]

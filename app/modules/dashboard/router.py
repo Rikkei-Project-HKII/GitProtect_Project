@@ -31,7 +31,7 @@ async def audit_authors(repo_id: int, spoofing_only: bool = False):
     }
 
 @router.get("/dashboard/export", summary="Xuất báo cáo tổng hợp tình trạng an ninh mã nguồn định dạng CSV hoặc PDF")
-async def export_report(format: str = Query("csv", regex="^(csv|pdf)$")):
+async def export_report(format: str = Query("csv", pattern="^(csv|pdf)$")):
     if format == "csv":
         return Response(content="id,repo_name,rule_name,severity,secret_masked\n", media_type="text/csv")
     return Response(content=b"%PDF-1.4 Mock Export Content", media_type="application/pdf")

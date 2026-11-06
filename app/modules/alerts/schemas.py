@@ -33,7 +33,7 @@ class SecurityAlertDetailResponse(BaseModel):
     detected_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AlertPaginatedListResponse(BaseModel):
     items: List[SecurityAlertDetailResponse]
@@ -45,7 +45,7 @@ class AlertStatusUpdateRequest(StrictBase):
     new_status: AlertStatusEnum = Field(..., description="Trạng thái mới cần chuyển sang")
     resolution_note: Optional[str] = Field(default=None, description="Lý do giải trình (Bắt buộc >= 10 ký tự khi false_positive)")
 
-    @root_validator
+    @root_validator(skip_on_failure=True)
     def validate_false_positive_note(cls, values):
         new_status = values.get("new_status")
         note = values.get("resolution_note")
@@ -69,7 +69,7 @@ class AlertStatusHistoryItem(BaseModel):
     created_at: datetime
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class AlertStatusUpdateResponse(BaseModel):
     alert: SecurityAlertDetailResponse
