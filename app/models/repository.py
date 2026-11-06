@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, List, Optional
 from datetime import datetime
 
 from sqlalchemy import (
+    Integer,
     String,
     Text,
     Enum,
@@ -54,7 +55,7 @@ class Repository(Base):
     )
 
     id: Mapped[int] = mapped_column(
-        mysql.BIGINT(),
+        mysql.BIGINT().with_variant(Integer, "sqlite"),
         primary_key=True,
         autoincrement=True,
         nullable=False,

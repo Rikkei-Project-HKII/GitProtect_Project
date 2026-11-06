@@ -4,7 +4,7 @@ GitProtect MVP Database Package
 
 from app.db.base import Base
 from app.db.session import engine, SessionLocal, get_db, DATABASE_URL, get_database_url
-from app.db.transaction import transaction_scope
+from app.db.transaction import transaction_scope, transactional_session, AlertTransactionManager
 
 __all__ = [
     "Base",
@@ -14,4 +14,6 @@ __all__ = [
     "DATABASE_URL",
     "get_database_url",
     "transaction_scope",
+    "transactional_session",
+    "AlertTransactionManager",
 ]
