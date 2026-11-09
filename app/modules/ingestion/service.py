@@ -94,11 +94,3 @@ class RepoConnectionService:
 
 
 # Existing PBI-02 implementation is preserved; it must be secured before public use.
-class WebhookService:
-    @staticmethod
-    def process_push_event(payload, delivery_id: str):
-        return {
-            "status": "queued", "delivery_id": delivery_id,
-            "queued_commits_count": len(payload.commits),
-            "actor_type": "system", "actor_label": "system",
-        }

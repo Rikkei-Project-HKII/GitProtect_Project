@@ -16,7 +16,8 @@ class GitHubClient:
     async def request(self, method: str, path: str, **kwargs):
         try:
             async with httpx.AsyncClient(timeout=12.0, follow_redirects=False) as client:
-                response = await client.request(method, API + path, headers=self.headers, **kwargs)
+                headers = {**self.headers, **kwargs.pop("headers", {})}
+                response = await client.request(method, API + path, headers=headers, **kwargs)
         except httpx.RequestError as exc:
             raise HTTPException(502, "GitHub API is temporarily unreachable") from exc
         if response.status_code == 401:
@@ -31,6 +32,8 @@ class GitHubClient:
             raise HTTPException(409, "GitHub webhook conflict")
         if response.status_code >= 400 or 300 <= response.status_code < 400:
             raise HTTPException(502, f"Unexpected GitHub API HTTP {response.status_code}")
+        if headers["Accept"] == "application/vnd.github.diff":
+            return response.text
         if response.status_code == 204 or not response.content:
             return None
         try:
