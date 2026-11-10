@@ -1,4 +1,6 @@
 """GitHub REST API client for repository onboarding (PBI-01)."""
+from contextlib import nullcontext
+
 import httpx
 from fastapi import HTTPException
 
@@ -6,7 +8,8 @@ API = "https://api.github.com"
 
 
 class GitHubClient:
-    def __init__(self, pat: str):
+    def __init__(self, pat: str, client: httpx.AsyncClient | None = None):
+        self.client = client
         self.headers = {
             "Authorization": f"Bearer {pat}",
             "Accept": "application/vnd.github+json",
@@ -15,7 +18,8 @@ class GitHubClient:
 
     async def request(self, method: str, path: str, **kwargs):
         try:
-            async with httpx.AsyncClient(timeout=12.0, follow_redirects=False) as client:
+            async with (nullcontext(self.client) if self.client is not None else
+                        httpx.AsyncClient(timeout=12.0, follow_redirects=False)) as client:
                 headers = {**self.headers, **kwargs.pop("headers", {})}
                 response = await client.request(method, API + path, headers=headers, **kwargs)
         except httpx.RequestError as exc:
