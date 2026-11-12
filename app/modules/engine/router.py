@@ -1,5 +1,5 @@
 from typing import Optional
-from fastapi import APIRouter, status
+from fastapi import APIRouter, HTTPException, status
 from app.core.enums import SeverityEnum
 from app.modules.engine.schemas import (
     ScanJobTriggerResponse, ScanJobStatusResponse,
@@ -25,9 +25,12 @@ async def trigger_scan(repo_id: int):
         "started_at": "2026-11-06T20:00:00Z"
     }
 
-@router.post("/scan/evaluate-text", response_model=EvaluateTextResponse, summary="Kiểm tra nhanh đoạn mã nguồn theo pipeline 3 lớp (FR-06, FR-07, FR-08)")
+@router.post("/scan/evaluate-text", response_model=EvaluateTextResponse, summary="Kiểm tra nhanh đoạn mã nguồn theo pipeline 3 lớp & 7 quy tắc (FR-06, FR-07, FR-08)")
 async def evaluate_text(req: EvaluateTextRequest):
-    return DetectionEngineService.evaluate_snippet(req.content, req.file_path)
+    try:
+        return DetectionEngineService.evaluate_snippet(req.content, req.file_path)
+    except TimeoutError:
+        raise HTTPException(status_code=503, detail="SCAN_TIMEOUT") from None
 
 @router.get("/scan/jobs/{id}", response_model=ScanJobStatusResponse, summary="Tra cứu tiến độ phần trăm (%) và trạng thái tiến trình quét nền (FR-10)")
 async def get_scan_job(id: str):
@@ -43,7 +46,7 @@ async def get_scan_job(id: str):
 
 @router.get("/rules", response_model=ScanRuleListResponse, summary="Lấy danh sách 7 quy tắc quét chuẩn hệ thống (RULE-01 đến RULE-07)")
 async def list_rules(is_enabled: Optional[bool] = None, severity: Optional[SeverityEnum] = None):
-    return {"items": [], "total": 7}
+    return DetectionEngineService.list_rules(is_enabled=is_enabled, severity=severity)
 
 @router.post("/rules", response_model=ScanRuleResponse, status_code=status.HTTP_201_CREATED, summary="[COULD - v2.0] Thêm quy tắc quét tùy chỉnh mở rộng")
 async def create_custom_rule(req: ScanRuleCreateRequest):
