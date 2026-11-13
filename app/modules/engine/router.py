@@ -1,4 +1,9 @@
 from typing import Optional
+from fastapi import Depends
+from redis.exceptions import RedisError
+from app.db.session import get_db
+from app.modules.engine import initial_scan
+from app.modules.engine.scan_alerts import repository, sync_native
 from fastapi import APIRouter, HTTPException, status
 from app.core.enums import SeverityEnum
 from app.modules.engine.schemas import (
@@ -12,18 +17,17 @@ from app.modules.engine.service import DetectionEngineService
 router = APIRouter(prefix="", tags=["MOD-02: Scanning & Detection Engine"])
 
 @router.post("/scan/trigger/{repo_id}", response_model=ScanJobTriggerResponse, status_code=status.HTTP_202_ACCEPTED, summary="Kích hoạt quét toàn diện khởi tạo (Initial Scan FR-10)")
-async def trigger_scan(repo_id: int):
-    return {
-        "job_id": f"job_repo_{repo_id}_init",
-        "repo_id": repo_id,
-        "default_branch": "main",
-        "scan_status": "running",
-        "progress_pct": 0,
-        "redis_key": f"scan:job:job_repo_{repo_id}_init",
-        "actor_type": "system",
-        "actor_label": "system",
-        "started_at": "2026-11-06T20:00:00Z"
-    }
+def trigger_scan(repo_id: int, db=Depends(get_db)):
+    repo = repository(db, repo_id, lock=True)
+    try:
+        with initial_scan.redis_client() as redis:
+            job = initial_scan.enqueue(repo, redis)
+            if job["scan_status"] == "pending":
+                repo.scan_status = "pending"
+                db.commit()
+            return job
+    except RedisError:
+        raise HTTPException(503, "Scan queue unavailable") from None
 
 @router.post("/scan/evaluate-text", response_model=EvaluateTextResponse, summary="Kiểm tra nhanh đoạn mã nguồn theo pipeline 3 lớp & 7 quy tắc (FR-06, FR-07, FR-08)")
 async def evaluate_text(req: EvaluateTextRequest):
@@ -33,16 +37,12 @@ async def evaluate_text(req: EvaluateTextRequest):
         raise HTTPException(status_code=503, detail="SCAN_TIMEOUT") from None
 
 @router.get("/scan/jobs/{id}", response_model=ScanJobStatusResponse, summary="Tra cứu tiến độ phần trăm (%) và trạng thái tiến trình quét nền (FR-10)")
-async def get_scan_job(id: str):
-    return {
-        "job_id": id,
-        "repo_id": 1,
-        "scan_status": "running",
-        "progress_pct": 65,
-        "scanned_files": 32,
-        "total_files": 49,
-        "alerts_detected": 2
-    }
+def get_scan_job(id: str):
+    try:
+        with initial_scan.redis_client() as redis:
+            return initial_scan.status(redis, id)
+    except RedisError:
+        raise HTTPException(503, "Scan queue unavailable") from None
 
 @router.get("/rules", response_model=ScanRuleListResponse, summary="Lấy danh sách 7 quy tắc quét chuẩn hệ thống (RULE-01 đến RULE-07)")
 async def list_rules(is_enabled: Optional[bool] = None, severity: Optional[SeverityEnum] = None):
@@ -69,14 +69,5 @@ async def create_custom_rule(req: ScanRuleCreateRequest):
     }
 
 @router.post("/sync/native-alerts/{repo_id}", response_model=NativeAlertSyncResponse, summary="Đồng bộ một chiều (pull) cảnh báo từ GitHub Secret Scanning & Dependabot (FR-03)")
-async def sync_native_alerts(repo_id: int):
-    return {
-        "repo_id": repo_id,
-        "synced_secret_alerts": 2,
-        "synced_dependabot_alerts": 3,
-        "new_alerts_inserted": 4,
-        "duplicates_skipped": 1,
-        "actor_type": "system",
-        "actor_label": "system",
-        "synced_at": "2026-11-06T20:00:00Z"
-    }
+def sync_native_alerts(repo_id: int, db=Depends(get_db)):
+    return sync_native(repo_id, db)

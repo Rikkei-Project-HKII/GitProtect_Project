@@ -1,45 +1,122 @@
+"""PBI-01 repository onboarding and listing."""
+import logging
+import os
+import re
 import secrets
+from urllib.parse import urlsplit
+
+from fastapi import HTTPException
+from redis.exceptions import RedisError
+from starlette.concurrency import run_in_threadpool
+from app.modules.engine import initial_scan
+from sqlalchemy import select, func
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+from sqlalchemy.orm import Session
+
 from app.core.security import crypto_service
-from app.modules.ingestion.schemas import RepoConnectRequest
+from app.models.repository import Repository
+from app.modules.ingestion.github_client import GitHubClient
+
+logger = logging.getLogger(__name__)
+_REPO_PART = re.compile(r"^[A-Za-z0-9_.-]+$")
+
+
+def parse_repo_url(url: str):
+    parsed = urlsplit(url)
+    if parsed.scheme != "https" or parsed.netloc != "github.com" or parsed.query or parsed.fragment:
+        raise HTTPException(422, "Only canonical https://github.com repository URLs are allowed")
+    segments = parsed.path.strip("/").split("/")
+    if len(segments) != 2 or not all(_REPO_PART.fullmatch(s) for s in segments):
+        raise HTTPException(422, "Expected https://github.com/owner/repo")
+    return segments
+
 
 class RepoConnectionService:
     @staticmethod
-    def connect_repository(req: RepoConnectRequest):
-        # 1. Verify GitHub PAT & fetch real default_branch via GitHub API (HTTPX / PyGithub)
-        real_default_branch = "main"
-        github_repo_id = 849201928 # mock GitHub repo ID
-        repo_name = req.repo_url.replace("https://github.com/", "").rstrip("/")
-        
-        # 2. Encrypt PAT and Webhook Secret using AES-256-GCM
-        encrypted_pat = crypto_service.encrypt(req.github_pat)
-        webhook_secret = req.webhook_secret or secrets.token_hex(20)
-        encrypted_secret = crypto_service.encrypt(webhook_secret)
-        
-        # 3. Register GitHub Webhook via GitHub API
-        # 4. Save to repositories table
-        return {
-            "id": 1,
-            "github_repo_id": github_repo_id,
-            "repo_name": repo_name,
-            "repo_url": req.repo_url,
-            "default_branch": real_default_branch,
-            "connection_status": "active",
-            "scan_status": "pending",
-            "last_error_message": None,
-            "last_scanned_at": None,
-            "created_at": "2026-11-06T20:00:00Z",
-            "updated_at": "2026-11-06T20:00:00Z"
-        }
+    async def connect_repository(req, db: Session):
+        owner, name = parse_repo_url(req.repo_url)
+        client = GitHubClient(req.github_pat)
+        metadata = await client.repository(owner, name)
+        if not isinstance(metadata, dict):
+            raise HTTPException(502, "Incomplete repository metadata from GitHub")
+        github_id = metadata.get("id")
+        full_name = metadata.get("full_name")
+        default_branch = metadata.get("default_branch")
+        repo_url = metadata.get("html_url")
+        if (type(github_id) is not int or github_id <= 0
+                or not isinstance(full_name, str)
+                or len(full_name.split("/")) != 2
+                or not all(_REPO_PART.fullmatch(part) for part in full_name.split("/"))
+                or not isinstance(default_branch, str) or not default_branch
+                or not isinstance(repo_url, str)):
+            raise HTTPException(502, "Incomplete repository metadata from GitHub")
+        try:
+            canonical_parts = parse_repo_url(repo_url)
+        except HTTPException as exc:
+            raise HTTPException(502, "Invalid repository URL from GitHub") from exc
+        if "/".join(canonical_parts).lower() != full_name.lower():
+            raise HTTPException(502, "Inconsistent repository metadata from GitHub")
+        if db.scalar(select(Repository.id).where(Repository.github_repo_id == github_id)) is not None:
+            raise HTTPException(409, "Repository already connected")
 
-class WebhookService:
+        callback = os.getenv("GITHUB_WEBHOOK_CALLBACK_URL", "").strip()
+        parsed_callback = urlsplit(callback)
+        if (parsed_callback.scheme != "https" or not parsed_callback.hostname
+                or parsed_callback.username or parsed_callback.password or parsed_callback.fragment):
+            raise HTTPException(503, "GITHUB_WEBHOOK_CALLBACK_URL must be a public HTTPS URL")
+        secret = req.webhook_secret or secrets.token_urlsafe(32)
+        # Encrypt before creating any external resource to avoid orphan hooks on crypto errors.
+        encrypted_pat = crypto_service.encrypt(req.github_pat)
+        encrypted_secret = crypto_service.encrypt(secret)
+        hook = await client.create_webhook(*full_name.split("/"), callback, secret)
+        if not isinstance(hook, dict) or type(hook.get("id")) is not int or hook["id"] <= 0:
+            raise HTTPException(502, "GitHub did not confirm webhook creation")
+
+        record = Repository(
+            github_repo_id=github_id,
+            repo_name=metadata["full_name"],
+            repo_url=metadata["html_url"],
+            default_branch=metadata["default_branch"],
+            access_token_encrypted=encrypted_pat,
+            webhook_secret_encrypted=encrypted_secret,
+            connection_status="active",
+            scan_status="pending",
+        )
+        try:
+            db.add(record)
+            db.commit()
+        except SQLAlchemyError as exc:
+            db.rollback()
+            try:
+                await client.delete_webhook(*full_name.split("/"), hook["id"])
+            except Exception:
+                logger.exception("Webhook cleanup failed after database error")
+            if isinstance(exc, IntegrityError):
+                raise HTTPException(409, "Repository already connected or database constraint failed") from exc
+            raise HTTPException(500, "Could not persist repository connection") from exc
+        db.refresh(record)
+        if req.trigger_initial_scan:
+            try:
+                await run_in_threadpool(initial_scan.enqueue_connected, record)
+            except RedisError:
+                # Onboarding already committed; expose the retry path on the repo.
+                record.scan_status = "failed"
+                record.last_error_message = "Scan queue unavailable; retry POST /api/v1/scan/trigger/{repo_id}"
+                db.commit()
+                db.refresh(record)
+        return record
+
     @staticmethod
-    def process_push_event(payload, delivery_id: str):
-        # Verify HMAC-SHA256, deduplicate delivery_id via Redis SETNX (TTL 24h)
-        # Push commit diff to Redis Queue for Worker
-        return {
-            "status": "queued",
-            "delivery_id": delivery_id,
-            "queued_commits_count": len(payload.commits),
-            "actor_type": "system",
-            "actor_label": "system"
-        }
+    def list_repositories(db: Session, connection_status=None, scan_status=None,
+                          search=None, page=1, page_size=20):
+        query = select(Repository)
+        if connection_status is not None:
+            query = query.where(Repository.connection_status == connection_status.value)
+        if scan_status is not None:
+            query = query.where(Repository.scan_status == scan_status.value)
+        if search:
+            query = query.where(Repository.repo_name.ilike(f"%{search}%"))
+        total = db.scalar(select(func.count()).select_from(query.subquery())) or 0
+        items = db.scalars(query.order_by(Repository.id.desc())
+                           .offset((page - 1) * page_size).limit(page_size)).all()
+        return {"items": items, "total": total, "page": page, "page_size": page_size}
