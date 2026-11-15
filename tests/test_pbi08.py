@@ -322,5 +322,151 @@ class TestPBI08TaskS208d(unittest.TestCase):
         self.assertIsNone(alert_db.resolved_at)
 
 
+class TestPBI08TaskS208e(unittest.TestCase):
+    """
+    S2-08e: Triển khai API GET /api/v1/alerts, GET /api/v1/alerts/{id}, GET /api/v1/alerts/{id}/history (Append-only AC-05).
+    """
+
+    def setUp(self):
+        from sqlalchemy import create_engine, event
+        from sqlalchemy.orm import sessionmaker
+        from app.models import SecurityAlert, AlertStatusHistory
+
+        self.engine = create_engine("sqlite:///:memory:")
+        @event.listens_for(self.engine, "connect")
+        def connect(dbapi_connection, connection_record):
+            dbapi_connection.create_function("CHAR_LENGTH", 1, lambda s: len(s) if s else 0)
+
+        SecurityAlert.__table__.create(self.engine)
+        AlertStatusHistory.__table__.create(self.engine)
+
+        SessionTest = sessionmaker(bind=self.engine)
+        self.db = SessionTest()
+
+        # Seed sample alerts
+        self.a1 = SecurityAlert(
+            id=101, repo_id=1, fingerprint="1" * 64, source="gitprotect_scanner",
+            rule_name="GitHub PAT", severity="critical", file_path="a.py", status="open",
+            detected_at=datetime.now(timezone.utc).replace(tzinfo=None)
+        )
+        self.a2 = SecurityAlert(
+            id=102, repo_id=1, fingerprint="2" * 64, source="gitprotect_scanner",
+            rule_name="Slack Token", severity="high", file_path="b.py", status="in_review",
+            detected_at=datetime.now(timezone.utc).replace(tzinfo=None)
+        )
+        self.a3 = SecurityAlert(
+            id=103, repo_id=2, fingerprint="3" * 64, source="github_native",
+            rule_name="Dependabot", severity="medium", file_path="package.json", status="resolved",
+            detected_at=datetime.now(timezone.utc).replace(tzinfo=None)
+        )
+        self.db.add_all([self.a1, self.a2, self.a3])
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_get_alerts_list_filtering_and_pagination(self):
+        """GET /api/v1/alerts hỗ trợ lọc theo repo_id, severity, status, source và phân trang."""
+        import asyncio
+        from app.modules.alerts.router import list_alerts
+
+        # Lọc theo repo_id = 1
+        res = asyncio.run(list_alerts(repo_id=1, db=self.db))
+        self.assertEqual(res["total"], 2)
+        self.assertEqual(len(res["items"]), 2)
+
+        # Lọc theo severity = critical
+        res_sev = asyncio.run(list_alerts(severity=SeverityEnum.CRITICAL, db=self.db))
+        self.assertEqual(res_sev["total"], 1)
+        self.assertEqual(res_sev["items"][0].id, 101)
+
+        # Phân trang page_size = 2
+        res_page = asyncio.run(list_alerts(page=1, page_size=2, db=self.db))
+        self.assertEqual(res_page["total"], 3)
+        self.assertEqual(len(res_page["items"]), 2)
+
+    def test_get_alert_by_id(self):
+        """GET /api/v1/alerts/{id} trả về chi tiết hoặc 404 khi không tồn tại."""
+        import asyncio
+        from fastapi import HTTPException
+        from app.modules.alerts.router import get_alert
+
+        res = asyncio.run(get_alert(id=101, db=self.db))
+        self.assertEqual(res.id, 101)
+        self.assertEqual(res.rule_name, "GitHub PAT")
+
+        with self.assertRaises(HTTPException) as ctx:
+            asyncio.run(get_alert(id=999, db=self.db))
+        self.assertEqual(ctx.exception.status_code, 404)
+
+    def test_get_alert_history_chronological(self):
+        """GET /api/v1/alerts/{id}/history trả về danh sách lịch sử tuần tự theo thời gian."""
+        import asyncio
+        from fastapi import HTTPException
+        from app.modules.alerts.router import get_history, update_status
+
+        # Tạo 2 bước chuyển trạng thái
+        req1 = AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, resolution_note="Bắt đầu duyệt")
+        asyncio.run(update_status(id=101, req=req1, db=self.db))
+
+        req2 = AlertStatusUpdateRequest(new_status=AlertStatusEnum.RESOLVED, resolution_note="Đã đổi token mới")
+        asyncio.run(update_status(id=101, req=req2, db=self.db))
+
+        hist = asyncio.run(get_history(id=101, db=self.db))
+        self.assertEqual(hist["total"], 2)
+        self.assertEqual(hist["items"][0].new_status, "in_review")
+        self.assertEqual(hist["items"][1].new_status, "resolved")
+
+        # Alert không tồn tại -> 404
+        with self.assertRaises(HTTPException) as ctx:
+            asyncio.run(get_history(id=999, db=self.db))
+        self.assertEqual(ctx.exception.status_code, 404)
+
+    def test_ac05_append_only_orm_blocks_update_and_delete(self):
+        """AC-05: CSDL Append-Only, chặn tuyệt đối thao tác UPDATE hoặc DELETE bản ghi lịch sử."""
+        from app.models import AlertStatusHistory
+
+        # Thêm 1 bản ghi lịch sử
+        entry = AlertStatusHistory(
+            alert_id=101,
+            old_status="open",
+            new_status="in_review",
+            actor_type="internal_operator",
+            actor_label="internal_operator",
+            resolution_note="Khởi tạo",
+        )
+        self.db.add(entry)
+        self.db.commit()
+
+        # Kiểm tra chặn UPDATE
+        entry.resolution_note = "Thay đổi nội dung lịch sử trái phép"
+        with self.assertRaises(ValueError) as ctx:
+            self.db.commit()
+        self.assertIn("AC-05 Violation", str(ctx.exception))
+        self.db.rollback()
+
+        # Kiểm tra chặn DELETE
+        with self.assertRaises(ValueError) as ctx:
+            self.db.delete(entry)
+            self.db.commit()
+        self.assertIn("AC-05 Violation", str(ctx.exception))
+        self.db.rollback()
+
+    def test_ac05_no_history_modification_endpoints(self):
+        """AC-05: Hệ thống không cung cấp bất kỳ API nào để sửa (PUT/PATCH) hoặc xóa (DELETE) lịch sử."""
+        from app.modules.alerts.router import router
+
+        history_routes = [r for r in router.routes if "/history" in r.path]
+        methods = {m for r in history_routes for m in r.methods}
+
+        # Chỉ cho phép phương thức GET trên endpoint history
+        self.assertEqual(methods, {"GET"})
+        self.assertNotIn("PUT", methods)
+        self.assertNotIn("PATCH", methods)
+        self.assertNotIn("DELETE", methods)
+        self.assertNotIn("POST", methods)
+
+
 if __name__ == "__main__":
     unittest.main()
