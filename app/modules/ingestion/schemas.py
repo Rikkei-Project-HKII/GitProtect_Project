@@ -1,11 +1,10 @@
 from datetime import datetime
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, ConfigDict, Field
 from app.core.enums import ConnectionStatusEnum, ScanStatusEnum, ActorTypeEnum
 
 class StrictBase(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
 class RepoConnectRequest(StrictBase):
     repo_url: str = Field(..., max_length=500, pattern=r"^https://github\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/?$")
@@ -14,6 +13,8 @@ class RepoConnectRequest(StrictBase):
     trigger_initial_scan: bool = Field(default=True)
 
 class RepositoryResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     github_repo_id: int
     repo_name: str
@@ -25,9 +26,6 @@ class RepositoryResponse(BaseModel):
     last_scanned_at: Optional[datetime] = None
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
 
 class RepositoryListResponse(BaseModel):
     items: List[RepositoryResponse]

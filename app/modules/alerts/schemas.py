@@ -1,13 +1,16 @@
 from datetime import datetime
 from typing import List, Optional
-from pydantic import BaseModel, Extra, Field, root_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from app.core.enums import AlertStatusEnum, SeverityEnum, AlertSourceEnum, ActorTypeEnum
 
+
 class StrictBase(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
+
 
 class SecurityAlertDetailResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     repo_id: int
     rule_id: Optional[int] = None
@@ -32,8 +35,6 @@ class SecurityAlertDetailResponse(BaseModel):
     resolved_at: Optional[datetime] = None
     detected_at: datetime
 
-    class Config:
-        from_attributes = True
 
 class AlertPaginatedListResponse(BaseModel):
     items: List[SecurityAlertDetailResponse]
@@ -41,24 +42,26 @@ class AlertPaginatedListResponse(BaseModel):
     page: int = 1
     page_size: int = 50
 
+
 class AlertStatusUpdateRequest(StrictBase):
     new_status: AlertStatusEnum = Field(..., description="Trạng thái mới cần chuyển sang")
     resolution_note: Optional[str] = Field(default=None, description="Lý do giải trình (Bắt buộc >= 10 ký tự khi false_positive)")
 
-    @root_validator(skip_on_failure=True)
-    def validate_false_positive_note(cls, values):
-        new_status = values.get("new_status")
-        note = values.get("resolution_note")
-        if new_status == AlertStatusEnum.FALSE_POSITIVE:
-            cleaned = (note or "").strip()
+    @model_validator(mode="after")
+    def validate_false_positive_note(self) -> "AlertStatusUpdateRequest":
+        if self.new_status == AlertStatusEnum.FALSE_POSITIVE:
+            cleaned = (self.resolution_note or "").strip()
             if len(cleaned) < 10:
                 raise ValueError("AC-01 Violation: resolution_note bắt buộc >= 10 ký tự khi đánh dấu false_positive.")
-            values["resolution_note"] = cleaned
-        elif note is not None:
-            values["resolution_note"] = note.strip() or None
-        return values
+            self.resolution_note = cleaned
+        elif self.resolution_note is not None:
+            self.resolution_note = self.resolution_note.strip() or None
+        return self
+
 
 class AlertStatusHistoryItem(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     alert_id: int
     old_status: Optional[AlertStatusEnum] = None
@@ -68,13 +71,12 @@ class AlertStatusHistoryItem(BaseModel):
     resolution_note: Optional[str] = None
     created_at: datetime
 
-    class Config:
-        from_attributes = True
 
 class AlertStatusUpdateResponse(BaseModel):
     alert: SecurityAlertDetailResponse
     history_entry: AlertStatusHistoryItem
     transaction_committed: bool = True
+
 
 class AlertHistoryListResponse(BaseModel):
     alert_id: int

@@ -1,11 +1,10 @@
 from datetime import datetime
 from typing import List, Literal, Optional
-from pydantic import BaseModel, Extra, Field
+from pydantic import BaseModel, ConfigDict, Field
 from app.core.enums import ScanStatusEnum, SeverityEnum, CharsetTypeEnum, ActorTypeEnum
 
 class StrictBase(BaseModel):
-    class Config:
-        extra = Extra.forbid
+    model_config = ConfigDict(extra="forbid")
 
 class ScanJobTriggerResponse(BaseModel):
     job_id: str
@@ -52,6 +51,8 @@ class EvaluateTextResponse(BaseModel):
     findings: List[EvaluateTextFinding] = []
 
 class ScanRuleResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     rule_code: str
     rule_name: str
@@ -67,9 +68,6 @@ class ScanRuleResponse(BaseModel):
     is_enabled: bool
     created_at: datetime
     updated_at: datetime
-
-    class Config:
-        from_attributes = True
 
 class ScanRuleListResponse(BaseModel):
     items: List[ScanRuleResponse]
