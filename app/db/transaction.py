@@ -19,7 +19,7 @@ Mục tiêu kỹ thuật (S1-02a, AC-01..AC-05):
 from __future__ import annotations
 
 from contextlib import contextmanager
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Generator, Optional, Tuple, Union, TYPE_CHECKING
 
 from sqlalchemy.orm import Session
@@ -146,7 +146,9 @@ class AlertTransactionManager:
                 "resolved",
                 "false_positive",
             ):
-                alert.resolved_at = datetime.utcnow()
+                alert.resolved_at = datetime.now(timezone.utc).replace(tzinfo=None)
+            else:
+                alert.resolved_at = None
 
             # 3. Tạo bản ghi nhật ký kiểm toán Append-only (AC-04, AC-05)
             history_entry = AlertStatusHistory(
