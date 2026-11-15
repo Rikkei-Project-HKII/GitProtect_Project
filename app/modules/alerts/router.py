@@ -1,3 +1,9 @@
+"""
+GitProtect MVP - Phân hệ MOD-03: Alert & Lifecycle Management
+Task S2-08e: Triển khai API GET /api/v1/alerts, GET /api/v1/alerts/{id},
+GET /api/v1/alerts/{id}/history (Append-only AC-05).
+"""
+
 from typing import Optional
 from fastapi import APIRouter, Query, Depends, HTTPException, status
 from sqlalchemy.orm import Session
