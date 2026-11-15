@@ -1,3 +1,9 @@
+"""
+GitProtect MVP - Phân hệ MOD-03: Alert & Lifecycle Management
+Task S2-08a: Xây dựng Pydantic Schema cho PATCH /api/v1/alerts/{id}/status
+với model_config = ConfigDict(extra='forbid') (AC-03).
+"""
+
 from datetime import datetime
 from typing import List, Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
@@ -5,6 +11,7 @@ from app.core.enums import AlertStatusEnum, SeverityEnum, AlertSourceEnum, Actor
 
 
 class StrictBase(BaseModel):
+    """Lớp Schema cơ sở từ chối mọi trường lạ ngoài định nghĩa (extra='forbid', AC-03)."""
     model_config = ConfigDict(extra="forbid")
 
 
