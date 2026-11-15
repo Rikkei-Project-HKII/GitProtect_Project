@@ -148,5 +148,78 @@ class TestPBI08TaskS208b(unittest.TestCase):
         self.assertEqual(req3.resolution_note, "ignore")
 
 
+class TestPBI08TaskS208c(unittest.TestCase):
+    """
+    S2-08c: Cài đặt logic Backend tự gán actor_type và actor_label snapshot ('system' / 'internal_operator') (AC-01, AC-02).
+    """
+
+    def setUp(self):
+        from sqlalchemy import create_engine, event
+        from sqlalchemy.orm import sessionmaker
+        from app.models import SecurityAlert, AlertStatusHistory
+
+        self.engine = create_engine("sqlite:///:memory:")
+        @event.listens_for(self.engine, "connect")
+        def connect(dbapi_connection, connection_record):
+            dbapi_connection.create_function("CHAR_LENGTH", 1, lambda s: len(s) if s else 0)
+
+        SecurityAlert.__table__.create(self.engine)
+        AlertStatusHistory.__table__.create(self.engine)
+
+        SessionTest = sessionmaker(bind=self.engine)
+        self.db = SessionTest()
+
+        self.test_alert = SecurityAlert(
+            id=1,
+            repo_id=1,
+            fingerprint="b" * 64,
+            source="gitprotect_scanner",
+            rule_name="GitHub PAT",
+            severity="critical",
+            file_path="config.py",
+            status="open",
+            detected_at=datetime.utcnow(),
+        )
+        self.db.add(self.test_alert)
+        self.db.commit()
+
+    def tearDown(self):
+        self.db.close()
+        self.engine.dispose()
+
+    def test_ac01_backend_assigns_internal_operator(self):
+        """API cập nhật -> Backend tự động gán actor_type='internal_operator', actor_label='internal_operator' (AC-01)."""
+        from app.modules.alerts.service import AlertLifecycleService
+
+        req = AlertStatusUpdateRequest(
+            new_status=AlertStatusEnum.IN_REVIEW,
+            resolution_note="Đang thẩm tra an ninh nội bộ",
+        )
+        result = AlertLifecycleService.update_alert_status_atomic(
+            db=self.db,
+            alert_id=1,
+            req=req,
+        )
+
+        self.assertEqual(result["history_entry"].actor_type, "internal_operator")
+        self.assertEqual(result["history_entry"].actor_label, "internal_operator")
+        self.assertEqual(result["history_entry"].new_status, "in_review")
+
+    def test_ac02_backend_assigns_system_for_workers(self):
+        """Worker/Job thực thi cập nhật -> Backend gán actor_type='system', actor_label='system' (AC-02)."""
+        from app.modules.alerts.service import AlertLifecycleService
+
+        result = AlertLifecycleService.record_system_status_change(
+            db=self.db,
+            alert_id=1,
+            new_status=AlertStatusEnum.RESOLVED,
+            resolution_note="Worker tự động giải quyết",
+        )
+
+        self.assertEqual(result["history_entry"].actor_type, "system")
+        self.assertEqual(result["history_entry"].actor_label, "system")
+        self.assertEqual(result["history_entry"].new_status, "resolved")
+
+
 if __name__ == "__main__":
     unittest.main()
