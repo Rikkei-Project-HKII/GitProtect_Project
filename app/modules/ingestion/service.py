@@ -6,6 +6,9 @@ import secrets
 from urllib.parse import urlsplit
 
 from fastapi import HTTPException
+from redis.exceptions import RedisError
+from starlette.concurrency import run_in_threadpool
+from app.modules.engine import initial_scan
 from sqlalchemy import select, func
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from sqlalchemy.orm import Session
@@ -92,7 +95,15 @@ class RepoConnectionService:
                 raise HTTPException(409, "Repository already connected or database constraint failed") from exc
             raise HTTPException(500, "Could not persist repository connection") from exc
         db.refresh(record)
-        # Initial scan integration with TV3 is pending; do not claim that a scan was queued.
+        if req.trigger_initial_scan:
+            try:
+                await run_in_threadpool(initial_scan.enqueue_connected, record)
+            except RedisError:
+                # Onboarding already committed; expose the retry path on the repo.
+                record.scan_status = "failed"
+                record.last_error_message = "Scan queue unavailable; retry POST /api/v1/scan/trigger/{repo_id}"
+                db.commit()
+                db.refresh(record)
         return record
 
     @staticmethod
@@ -109,4 +120,3 @@ class RepoConnectionService:
         items = db.scalars(query.order_by(Repository.id.desc())
                            .offset((page - 1) * page_size).limit(page_size)).all()
         return {"items": items, "total": total, "page": page, "page_size": page_size}
-
