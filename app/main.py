@@ -17,6 +17,16 @@ app = FastAPI(
 app.include_router(api_v1_router)
 
 
+@app.on_event("startup")
+def validate_security_configuration():
+    """
+    Kiểm tra cấu hình bắt buộc khi triển khai: Master Key AES-256-GCM.
+    Nếu thiếu khóa, ứng dụng sẽ dừng với lỗi rõ ràng ngay khi khởi động.
+    """
+    from app.core.security import CryptoService
+    CryptoService()
+
+
 @app.get("/", tags=["Health Check"])
 async def root():
     return {

@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from pydantic import BaseModel
 
 class Settings(BaseModel):
@@ -16,9 +17,9 @@ class Settings(BaseModel):
     REDIS_PORT: int = int(os.getenv("REDIS_PORT", 6379))
     
     # Master Key for AES-256-GCM (32 bytes hex or url-safe string)
-    AES_MASTER_KEY_HEX: str = os.getenv(
-        "AES_MASTER_KEY_HEX",
-        "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+    # Bắt buộc cung cấp qua biến môi trường ở môi trường triển khai, loại bỏ fallback mặc định
+    AES_MASTER_KEY_HEX: Optional[str] = (
+        os.getenv("GITPROTECT_AES_MASTER_KEY") or os.getenv("AES_MASTER_KEY_HEX")
     )
     
     ALLOWED_EMAIL_DOMAINS: list[str] = [

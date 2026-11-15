@@ -58,14 +58,16 @@ class CryptoService:
             master_key_hex
             or key_hex
             or os.getenv("GITPROTECT_AES_MASTER_KEY")
-            or getattr(settings, "AES_MASTER_KEY_HEX", None)
             or os.getenv("AES_MASTER_KEY_HEX")
+            or (getattr(settings, "AES_MASTER_KEY_HEX", None) if settings else None)
         )
-        if not raw_hex:
-            # Fallback dùng dev key mặc định phục vụ chạy thử nghiệm cục bộ
-            raw_hex = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+        if not raw_hex or not str(raw_hex).strip():
+            raise ValueError(
+                "Thiếu cấu hình khóa AES Master Key. Bắt buộc cung cấp khóa 256-bit (64 ký tự Hex) "
+                "qua biến môi trường 'GITPROTECT_AES_MASTER_KEY' hoặc 'AES_MASTER_KEY_HEX' ở môi trường triển khai."
+            )
 
-        clean_hex = raw_hex.strip()
+        clean_hex = str(raw_hex).strip()
         try:
             self._key_bytes = bytes.fromhex(clean_hex)
         except ValueError as err:
@@ -171,8 +173,19 @@ class CryptoService:
         return f"{prefix}****{suffix}"
 
 
-# Singleton instance sẵn sàng import trực tiếp trong dự án
-crypto_service = CryptoService()
+# Singleton instance hoặc Lazy proxy
+try:
+    crypto_service = CryptoService()
+except ValueError:
+    class _LazyCryptoService:
+        """
+        Proxy cho phép import module mà không bị crash trước khi cấu hình env,
+        nhưng sẽ ném lỗi rõ ràng ngay khi cố gắng sử dụng tính năng mã hóa mà thiếu khóa.
+        """
+        def __getattr__(self, name: str):
+            return getattr(CryptoService(), name)
+
+    crypto_service = _LazyCryptoService()
 
 
 # ============================================================================

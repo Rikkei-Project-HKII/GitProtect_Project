@@ -1,46 +1,109 @@
 from typing import Optional
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, Depends, HTTPException, status
+from sqlalchemy.orm import Session
+
 from app.core.enums import SeverityEnum, AlertStatusEnum, AlertSourceEnum
+from app.db.session import get_db
+from app.models import SecurityAlert, AlertStatusHistory
 from app.modules.alerts.schemas import (
-    AlertPaginatedListResponse, SecurityAlertDetailResponse,
-    AlertStatusUpdateRequest, AlertStatusUpdateResponse,
-    AlertHistoryListResponse
+    AlertPaginatedListResponse,
+    SecurityAlertDetailResponse,
+    AlertStatusUpdateRequest,
+    AlertStatusUpdateResponse,
+    AlertHistoryListResponse,
 )
 from app.modules.alerts.service import AlertLifecycleService
 
 router = APIRouter(prefix="", tags=["MOD-03: Alert & Lifecycle Management"])
 
-@router.get("/alerts", response_model=AlertPaginatedListResponse, summary="Truy vấn và lọc danh sách cảnh báo bảo mật đa tiêu chí (FR-04, FR-05)")
+
+@router.get(
+    "/alerts",
+    response_model=AlertPaginatedListResponse,
+    summary="Truy vấn và lọc danh sách cảnh báo bảo mật đa tiêu chí (FR-04, FR-05)",
+)
 async def list_alerts(
     repo_id: Optional[int] = None,
     severity: Optional[SeverityEnum] = None,
     status: Optional[AlertStatusEnum] = None,
     source: Optional[AlertSourceEnum] = None,
     page: int = Query(1, ge=1),
-    page_size: int = Query(50, ge=1, le=50)
+    page_size: int = Query(50, ge=1, le=50),
+    db: Session = Depends(get_db),
 ):
-    return {"items": [], "total": 0, "page": page, "page_size": page_size}
+    query = db.query(SecurityAlert)
+    if repo_id is not None:
+        query = query.filter(SecurityAlert.repo_id == repo_id)
+    if severity is not None:
+        query = query.filter(SecurityAlert.severity == severity.value)
+    if status is not None:
+        query = query.filter(SecurityAlert.status == status.value)
+    if source is not None:
+        query = query.filter(SecurityAlert.source == source.value)
 
-@router.get("/alerts/{id}", response_model=SecurityAlertDetailResponse, summary="Xem chi tiết một cảnh báo bảo mật (Data Masking NFR-01)")
-async def get_alert(id: int):
-    return {
-        "id": id,
-        "repo_id": 1,
-        "rule_id": 1,
-        "fingerprint": "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
-        "source": "gitprotect_scanner",
-        "rule_name": "GitHub Personal Access Token (PAT)",
-        "severity": "critical",
-        "file_path": "src/config.py",
-        "secret_masked": "ghp_****1a2b",
-        "status": "open",
-        "detected_at": "2026-11-06T20:00:00Z"
-    }
+    p = 1 if hasattr(page, "default") else int(page)
+    ps = 50 if hasattr(page_size, "default") else int(page_size)
 
-@router.patch("/alerts/{id}/status", response_model=AlertStatusUpdateResponse, summary="Cập nhật trạng thái cảnh báo & ghi lịch sử kiểm toán nguyên tử (AC-01..AC-05)")
-async def update_status(id: int, req: AlertStatusUpdateRequest):
-    return AlertLifecycleService.update_alert_status_atomic(id, req)
+    total = query.count()
+    items = (
+        query.order_by(SecurityAlert.detected_at.desc())
+        .offset((p - 1) * ps)
+        .limit(ps)
+        .all()
+    )
+    return {"items": items, "total": total, "page": p, "page_size": ps}
 
-@router.get("/alerts/{id}/history", response_model=AlertHistoryListResponse, summary="Truy xuất toàn bộ lịch sử kiểm toán Append-only của cảnh báo (AC-05)")
-async def get_history(id: int):
-    return {"alert_id": id, "items": [], "total": 0}
+
+@router.get(
+    "/alerts/{id}",
+    response_model=SecurityAlertDetailResponse,
+    summary="Xem chi tiết một cảnh báo bảo mật (Data Masking NFR-01)",
+)
+async def get_alert(id: int, db: Session = Depends(get_db)):
+    alert = db.query(SecurityAlert).filter(SecurityAlert.id == id).first()
+    if not alert:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Không tìm thấy cảnh báo bảo mật với ID = {id}.",
+        )
+    return alert
+
+
+@router.patch(
+    "/alerts/{id}/status",
+    response_model=AlertStatusUpdateResponse,
+    summary="Cập nhật trạng thái cảnh báo & ghi lịch sử kiểm toán nguyên tử (AC-01..AC-05)",
+)
+async def update_status(
+    id: int,
+    req: AlertStatusUpdateRequest,
+    db: Session = Depends(get_db),
+):
+    try:
+        return AlertLifecycleService.update_alert_status_atomic(db=db, alert_id=id, req=req)
+    except ValueError as e:
+        error_msg = str(e)
+        if "Không tìm thấy" in error_msg:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=error_msg)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=error_msg)
+
+
+@router.get(
+    "/alerts/{id}/history",
+    response_model=AlertHistoryListResponse,
+    summary="Truy xuất toàn bộ lịch sử kiểm toán Append-only của cảnh báo (AC-05)",
+)
+async def get_history(id: int, db: Session = Depends(get_db)):
+    alert = db.query(SecurityAlert).filter(SecurityAlert.id == id).first()
+    if not alert:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Không tìm thấy cảnh báo bảo mật với ID = {id}.",
+        )
+    items = (
+        db.query(AlertStatusHistory)
+        .filter(AlertStatusHistory.alert_id == id)
+        .order_by(AlertStatusHistory.created_at.asc(), AlertStatusHistory.id.asc())
+        .all()
+    )
+    return {"alert_id": id, "items": items, "total": len(items)}
