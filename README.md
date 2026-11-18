@@ -49,3 +49,23 @@ python3 main.py
 
 - Truy cập Swagger UI trực quan: `http://localhost:8000/docs`
 - Truy cập ReDoc tài liệu chi tiết: `http://localhost:8000/redoc`
+
+### PBI-07 — Initial Scan và GitHub Native Alerts
+
+Khởi động MySQL với migration đã áp dụng và Redis. Dùng cùng cấu hình MySQL,
+Redis và khóa mã hóa PAT cho API và tiến trình worker. Từ thư mục gốc:
+
+    python -m app.modules.engine.initial_scan
+
+Kết nối repo với `trigger_initial_scan=true` (mặc định), hoặc gọi
+`POST /api/v1/scan/trigger/{repo_id}`. Endpoint trả 202 và job_id; khi
+job đang chờ/chạy, gọi lại sẽ nhận cùng ID. Theo dõi qua
+`GET /api/v1/scan/jobs/{job_id}`. Redis lưu kết quả cuối 24 giờ.
+Worker lấy snapshot của nhánh mặc định, duyệt các thư mục và quét blob văn bản
+UTF-8 bằng bộ quy tắc PBI-06; bỏ qua binary, symlink và submodule. Nếu worker
+bị dừng, worker khác có thể nhận lại job khi lease 180 giây hết hạn.
+
+`POST /api/v1/sync/native-alerts/{repo_id}` kéo các trang Secret Scanning và
+Dependabot từ GitHub. PAT cần quyền đọc Contents, Secret scanning alerts và
+Dependabot alerts trên repo đã bật các tính năng tương ứng. Alert và lịch sử
+system được ghi cùng transaction; lỗi từ một nguồn sẽ rollback lần đồng bộ.
