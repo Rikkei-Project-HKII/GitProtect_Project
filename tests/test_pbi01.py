@@ -55,7 +55,7 @@ from app.modules.ingestion.service import RepoConnectionService
 async def test_connect_encrypts_credentials_and_uses_canonical_name(monkeypatch):
     monkeypatch.setenv("GITHUB_WEBHOOK_CALLBACK_URL", "https://example.com/api/v1/webhooks/github")
     req = SimpleNamespace(repo_url="https://github.com/demo/test", github_pat="private-pat",
-                          webhook_secret="private-secret")
+                          webhook_secret="private-secret", trigger_initial_scan=False)
     db = Mock()
     db.scalar.return_value = None
     metadata = dict(id=123, full_name="Demo/Test", default_branch="develop",
@@ -75,7 +75,7 @@ async def test_connect_encrypts_credentials_and_uses_canonical_name(monkeypatch)
 async def test_connect_cleans_hook_after_commit_failure(monkeypatch):
     monkeypatch.setenv("GITHUB_WEBHOOK_CALLBACK_URL", "https://example.com/hook")
     req = SimpleNamespace(repo_url="https://github.com/demo/test", github_pat="private-pat",
-                          webhook_secret="private-secret")
+                          webhook_secret="private-secret", trigger_initial_scan=False)
     db = Mock()
     db.scalar.return_value = None
     db.commit.side_effect = SQLAlchemyError("database unavailable")
