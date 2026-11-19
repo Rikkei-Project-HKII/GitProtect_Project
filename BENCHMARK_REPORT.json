@@ -1,0 +1,37 @@
+{
+  "benchmark_summary": {
+    "total_samples": 200,
+    "true_positives": 100,
+    "false_negatives": 0,
+    "false_positives": 0,
+    "true_negatives": 100,
+    "recall_pct": 100.0,
+    "precision_pct": 100.0,
+    "false_positive_rate_pct": 0.0,
+    "f1_score": 100.0,
+    "total_execution_time_seconds": 0.016,
+    "average_time_per_sample_ms": 0.08
+  },
+  "acceptance_criteria_verification": {
+    "NFR-03_Recall_ge_90_pct": {
+      "threshold": ">= 90.0%",
+      "actual": "100.0%",
+      "passed": true
+    },
+    "NFR-03_Precision_ge_85_pct": {
+      "threshold": ">= 85.0%",
+      "actual": "100.0%",
+      "passed": true
+    },
+    "NFR-03_FPR_le_15_pct": {
+      "threshold": "<= 15.0%",
+      "actual": "0.0%",
+      "passed": true
+    },
+    "NFR-02_Batch_Scan_Time_le_10s": {
+      "threshold": "< 10.0s",
+      "actual": "0.016s",
+      "passed": true
+    }
+  }
+}

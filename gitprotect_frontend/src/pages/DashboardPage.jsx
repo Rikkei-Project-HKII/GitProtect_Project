@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
-import { AlertCircle } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { AlertCircle, RefreshCw, GitBranch, Bell, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { dashboardApi } from '../api/dashboardApi';
 import KpiCards from '../components/dashboard/KpiCards';
+import LeakTrendChart from '../components/dashboard/LeakTrendChart';
+import RepoRiskTable from '../components/dashboard/RepoRiskTable';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 export default function DashboardPage() {
@@ -10,81 +12,88 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const loadData = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const data = await dashboardApi.getMetrics();
+      setMetrics(data);
+    } catch (err) {
+      setError(err.message || 'Không thể tải số liệu thống kê Dashboard.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    let cancelled = false;
-    const load = async () => {
-      try {
-        setLoading(true);
-        setError('');
-        const data = await dashboardApi.getMetrics();
-        if (!cancelled) setMetrics(data);
-      } catch (err) {
-        if (!cancelled) setError(err.message || 'Không thể tải dashboard.');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    };
-    load();
-    return () => {
-      cancelled = true;
-    };
+    loadData();
   }, []);
 
   return (
-    <main className="p-4 sm:p-8 space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard hệ thống</h1>
-        <p className="text-sm text-slate-500 mt-1">
-          Theo dõi KPI bảo mật và chuyển tới màn hình kết nối kho lưu trữ GitHub.
-        </p>
+    <main className="p-4 sm:p-8 space-y-6 max-w-7xl mx-auto">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-bold text-slate-900">
+              Dashboard Giám sát An toàn Đa Kho lưu trữ
+            </h1>
+            <span className="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-medium">
+              [PBI-09 / T05DB2C]
+            </span>
+          </div>
+          <p className="text-sm text-slate-500 mt-1">
+            Tổng hợp chỉ số KPI 4 mức độ nghiêm trọng, biểu đồ xu hướng và đánh giá điểm rủi ro an ninh theo thời gian thực.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={loadData}
+            disabled={loading}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 disabled:opacity-50 transition shadow-sm"
+          >
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            Làm mới
+          </button>
+          <Link
+            to="/repos"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition shadow-sm"
+          >
+            <GitBranch className="w-4 h-4" />
+            Kết nối Repo
+          </Link>
+          <Link
+            to="/alerts"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition shadow-sm"
+          >
+            <Bell className="w-4 h-4" />
+            Xem Cảnh báo
+          </Link>
+        </div>
       </div>
 
+      {/* Thông báo lỗi nếu có */}
       {error && (
         <div className="flex items-center gap-2.5 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
-          <AlertCircle className="w-5 h-5 shrink-0" />
+          <AlertCircle className="w-5 h-5 shrink-0 text-red-600" />
           <span>{error}</span>
         </div>
       )}
 
-      {loading ? <LoadingSpinner label="Đang tải số liệu dashboard..." /> : <KpiCards metrics={metrics} />}
+      {/* 4 Thẻ KPI Phân loại Severity (S2-09b) */}
+      {loading ? (
+        <LoadingSpinner label="Đang tải chỉ số KPI bảo mật..." />
+      ) : (
+        <KpiCards metrics={metrics} />
+      )}
 
-      <Link
-        to="/repos"
-        className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700"
-      >
-        Quản lý kho lưu trữ
-      </Link>
-    </main>
-  );
-}
-
-
-import { useEffect, useState } from 'react';
-import { getMetrics, getRepoBreakdown } from '../api/dashboard';
-import { KpiCards, TrendChart, RepoBreakdownChart } from '../components/dashboard/DashboardCharts';
-import AlertList from '../components/dashboard/AlertList';
-import AlertDetailModal from '../components/dashboard/AlertDetailModal';
-
-export default function DashboardPage() {
-  const [metrics, setMetrics] = useState(null);
-  const [repos, setRepos] = useState([]);
-  const [selectedId, setSelectedId] = useState(null);
-
-  useEffect(() => {
-    getMetrics().then(setMetrics).catch(() => {});
-    getRepoBreakdown().then((d) => setRepos(d.items)).catch(() => {});
-  }, []);
-
-  return (
-    <div className="mx-auto max-w-6xl space-y-5 p-5">
-      <h1 className="text-2xl font-bold">Dashboard giám sát rò rỉ secret</h1>
-      <KpiCards metrics={metrics} />
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="lg:col-span-2"><TrendChart /></div>
-        <RepoBreakdownChart items={repos} />
+      {/* Biểu đồ Xu hướng rò rỉ Chart.js & Bảng điểm rủi ro RepoRiskTable */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <LeakTrendChart />
+        <RepoRiskTable />
       </div>
-      <AlertList repos={repos} onSelect={setSelectedId} />
-      {selectedId && <AlertDetailModal alertId={selectedId} onClose={() => setSelectedId(null)} />}
-    </div>
+    </main>
   );
 }

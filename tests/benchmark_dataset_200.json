@@ -1,0 +1,1802 @@
+[
+  {
+    "id": "TP-PAT-01",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_0.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr000XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-02",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_1.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr001XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-03",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_2.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr002XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-04",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_3.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr003XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-05",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_4.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr004XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-06",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_5.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr005XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-07",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_6.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr006XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-08",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_7.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr007XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-09",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_8.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr008XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-PAT-10",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/config/github_client_9.py",
+    "content": "GITHUB_TOKEN = \"ghp_AbC123Def456Ghi789Jkl012Mno345Pqr009XyZ\"\nclient.connect(GITHUB_TOKEN)",
+    "expected_leaked": true,
+    "description": "GitHub Classic PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-01",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_0.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ00\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-02",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_1.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ01\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-03",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_2.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ02\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-04",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_3.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ03\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-05",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_4.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ04\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-06",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_5.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ05\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-07",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_6.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ06\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-08",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_7.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ07\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-09",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_8.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ08\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-FINE-PAT-10",
+    "type": "positive",
+    "rule": "RULE-01",
+    "file_path": "src/auth/service_9.py",
+    "content": "pat_token = \"github_pat_11AB22CD33EF44GH55IJ66_abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ09\"",
+    "expected_leaked": true,
+    "description": "GitHub Fine-grained PAT trong mã nguồn"
+  },
+  {
+    "id": "TP-KEY-01",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_0.key",
+    "content": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END RSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối RSA Private Key"
+  },
+  {
+    "id": "TP-KEY-02",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_1.key",
+    "content": "-----BEGIN EC PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END EC PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối EC Private Key"
+  },
+  {
+    "id": "TP-KEY-03",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_2.key",
+    "content": "-----BEGIN OPENSSH PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END OPENSSH PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối OPENSSH Private Key"
+  },
+  {
+    "id": "TP-KEY-04",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_3.key",
+    "content": "-----BEGIN DSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END DSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối DSA Private Key"
+  },
+  {
+    "id": "TP-KEY-05",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_4.key",
+    "content": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END ENCRYPTED PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối ENCRYPTED Private Key"
+  },
+  {
+    "id": "TP-KEY-06",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_5.key",
+    "content": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END RSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối RSA Private Key"
+  },
+  {
+    "id": "TP-KEY-07",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_6.key",
+    "content": "-----BEGIN EC PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END EC PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối EC Private Key"
+  },
+  {
+    "id": "TP-KEY-08",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_7.key",
+    "content": "-----BEGIN OPENSSH PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END OPENSSH PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối OPENSSH Private Key"
+  },
+  {
+    "id": "TP-KEY-09",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_8.key",
+    "content": "-----BEGIN DSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END DSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối DSA Private Key"
+  },
+  {
+    "id": "TP-KEY-10",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_9.key",
+    "content": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END ENCRYPTED PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối ENCRYPTED Private Key"
+  },
+  {
+    "id": "TP-KEY-11",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_10.key",
+    "content": "-----BEGIN RSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END RSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối RSA Private Key"
+  },
+  {
+    "id": "TP-KEY-12",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_11.key",
+    "content": "-----BEGIN EC PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END EC PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối EC Private Key"
+  },
+  {
+    "id": "TP-KEY-13",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_12.key",
+    "content": "-----BEGIN OPENSSH PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END OPENSSH PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối OPENSSH Private Key"
+  },
+  {
+    "id": "TP-KEY-14",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_13.key",
+    "content": "-----BEGIN DSA PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END DSA PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối DSA Private Key"
+  },
+  {
+    "id": "TP-KEY-15",
+    "type": "positive",
+    "rule": "RULE-02",
+    "file_path": "keys/server_id_14.key",
+    "content": "-----BEGIN ENCRYPTED PRIVATE KEY-----\nMIIEowIBAAKCAQEA0m4wKh6X8n09182379182739182371928371928371298371\n-----END ENCRYPTED PRIVATE KEY-----",
+    "expected_leaked": true,
+    "description": "Khối ENCRYPTED Private Key"
+  },
+  {
+    "id": "TP-ENV-01",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "DATABASE_URL=\"postgres://user:super_secret_pw_00@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán DATABASE_URL"
+  },
+  {
+    "id": "TP-ENV-02",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "JWT_SECRET=\"postgres://user:super_secret_pw_01@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán JWT_SECRET"
+  },
+  {
+    "id": "TP-ENV-03",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "APP_SECRET_KEY=\"postgres://user:super_secret_pw_02@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán APP_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-04",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "STRIPE_SECRET_KEY=\"postgres://user:super_secret_pw_03@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán STRIPE_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-05",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "DATABASE_URL=\"postgres://user:super_secret_pw_04@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán DATABASE_URL"
+  },
+  {
+    "id": "TP-ENV-06",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "JWT_SECRET=\"postgres://user:super_secret_pw_05@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán JWT_SECRET"
+  },
+  {
+    "id": "TP-ENV-07",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "APP_SECRET_KEY=\"postgres://user:super_secret_pw_06@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán APP_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-08",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "STRIPE_SECRET_KEY=\"postgres://user:super_secret_pw_07@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán STRIPE_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-09",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "DATABASE_URL=\"postgres://user:super_secret_pw_08@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán DATABASE_URL"
+  },
+  {
+    "id": "TP-ENV-10",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "JWT_SECRET=\"postgres://user:super_secret_pw_09@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán JWT_SECRET"
+  },
+  {
+    "id": "TP-ENV-11",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "APP_SECRET_KEY=\"postgres://user:super_secret_pw_10@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán APP_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-12",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "STRIPE_SECRET_KEY=\"postgres://user:super_secret_pw_11@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán STRIPE_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-13",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "DATABASE_URL=\"postgres://user:super_secret_pw_12@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán DATABASE_URL"
+  },
+  {
+    "id": "TP-ENV-14",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "JWT_SECRET=\"postgres://user:super_secret_pw_13@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán JWT_SECRET"
+  },
+  {
+    "id": "TP-ENV-15",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "APP_SECRET_KEY=\"postgres://user:super_secret_pw_14@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán APP_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-16",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "STRIPE_SECRET_KEY=\"postgres://user:super_secret_pw_15@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán STRIPE_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-17",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "DATABASE_URL=\"postgres://user:super_secret_pw_16@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán DATABASE_URL"
+  },
+  {
+    "id": "TP-ENV-18",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "JWT_SECRET=\"postgres://user:super_secret_pw_17@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán JWT_SECRET"
+  },
+  {
+    "id": "TP-ENV-19",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "APP_SECRET_KEY=\"postgres://user:super_secret_pw_18@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán APP_SECRET_KEY"
+  },
+  {
+    "id": "TP-ENV-20",
+    "type": "positive",
+    "rule": "RULE-03",
+    "file_path": ".env",
+    "content": "STRIPE_SECRET_KEY=\"postgres://user:super_secret_pw_19@prod-db.internal:5432/main_db\"",
+    "expected_leaked": true,
+    "description": "Tập tin .env sản phẩm gán STRIPE_SECRET_KEY"
+  },
+  {
+    "id": "TP-AWS-01",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN700ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY00\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-02",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN701ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY01\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-03",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN702ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY02\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-04",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN703ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY03\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-05",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN704ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY04\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-06",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN705ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY05\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-07",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN706ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY06\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-08",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN707ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY07\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-09",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN708ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY08\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-10",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN709ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY09\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-11",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN710ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY10\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-12",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN711ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY11\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-13",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN712ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY12\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-14",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"ASIAIOSFODNN713ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY13\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-AWS-15",
+    "type": "positive",
+    "rule": "RULE-04",
+    "file_path": "deploy/aws_config.py",
+    "content": "AWS_ACCESS_KEY = \"AKIAIOSFODNN714ABCD5E\"\nAWS_SECRET = \"wJalrXUtnFEMI/K7MDENG/bPxRfiCYSECRETKEY14\"",
+    "expected_leaked": true,
+    "description": "AWS Access Key ID và Secret"
+  },
+  {
+    "id": "TP-CCCD-01",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_0.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"001099012300\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 001"
+  },
+  {
+    "id": "TP-CCCD-02",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_1.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"079099012301\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 079"
+  },
+  {
+    "id": "TP-CCCD-03",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_2.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"048099012302\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 048"
+  },
+  {
+    "id": "TP-CCCD-04",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_3.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"092099012303\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 092"
+  },
+  {
+    "id": "TP-CCCD-05",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_4.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"038099012304\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 038"
+  },
+  {
+    "id": "TP-CCCD-06",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_5.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"001099012305\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 001"
+  },
+  {
+    "id": "TP-CCCD-07",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_6.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"079099012306\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 079"
+  },
+  {
+    "id": "TP-CCCD-08",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_7.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"048099012307\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 048"
+  },
+  {
+    "id": "TP-CCCD-09",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_8.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"092099012308\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 092"
+  },
+  {
+    "id": "TP-CCCD-10",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_9.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"038099012309\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 038"
+  },
+  {
+    "id": "TP-CCCD-11",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_10.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"001099012310\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 001"
+  },
+  {
+    "id": "TP-CCCD-12",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_11.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"079099012311\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 079"
+  },
+  {
+    "id": "TP-CCCD-13",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_12.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"048099012312\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 048"
+  },
+  {
+    "id": "TP-CCCD-14",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_13.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"092099012313\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 092"
+  },
+  {
+    "id": "TP-CCCD-15",
+    "type": "positive",
+    "rule": "RULE-05",
+    "file_path": "users/profile_14.py",
+    "content": "# so can cuoc cong dan xac thuc identity\nuser_cccd = \"038099012314\"; // CCCD hop le",
+    "expected_leaked": true,
+    "description": "Số CCCD Việt Nam hợp lệ tỉnh 038"
+  },
+  {
+    "id": "TP-BOT-01",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx00\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-02",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef01\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-03",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx02\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-04",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef03\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-05",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx04\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-06",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef05\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-07",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx06\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-08",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef07\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-09",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx08\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-10",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef09\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-11",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx10\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-12",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef11\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-13",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx12\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TP-BOT-14",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "alerts/discord_hook.py",
+    "content": "WEBHOOK = \"https://discord.com/api/webhooks/123456789012345678/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-abcdef13\"",
+    "expected_leaked": true,
+    "description": "Discord Webhook Token"
+  },
+  {
+    "id": "TP-BOT-15",
+    "type": "positive",
+    "rule": "RULE-06",
+    "file_path": "bot/slack_client.py",
+    "content": "SLACK_BOT_TOKEN = \"xoxb-123456789012-987654321098-abcdefghijklmnopqrstuvwx14\"",
+    "expected_leaked": true,
+    "description": "Slack Bot Token (xoxb-)"
+  },
+  {
+    "id": "TN-ALLOWLIST-01",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_0\"\nJWT_SECRET=\"your_sample_secret_key_here_00\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-02",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_1\"\nJWT_SECRET=\"your_sample_secret_key_here_01\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-03",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_2\"\nJWT_SECRET=\"your_sample_secret_key_here_02\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-04",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_3\"\nJWT_SECRET=\"your_sample_secret_key_here_03\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-05",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_4\"\nJWT_SECRET=\"your_sample_secret_key_here_04\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-06",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_5\"\nJWT_SECRET=\"your_sample_secret_key_here_05\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-07",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_6\"\nJWT_SECRET=\"your_sample_secret_key_here_06\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-08",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_7\"\nJWT_SECRET=\"your_sample_secret_key_here_07\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-09",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_8\"\nJWT_SECRET=\"your_sample_secret_key_here_08\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-10",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_9\"\nJWT_SECRET=\"your_sample_secret_key_here_09\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-11",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_10\"\nJWT_SECRET=\"your_sample_secret_key_here_10\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-12",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_11\"\nJWT_SECRET=\"your_sample_secret_key_here_11\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-13",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_12\"\nJWT_SECRET=\"your_sample_secret_key_here_12\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-14",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_13\"\nJWT_SECRET=\"your_sample_secret_key_here_13\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-15",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_14\"\nJWT_SECRET=\"your_sample_secret_key_here_14\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-16",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_15\"\nJWT_SECRET=\"your_sample_secret_key_here_15\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-17",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_16\"\nJWT_SECRET=\"your_sample_secret_key_here_16\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-18",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_17\"\nJWT_SECRET=\"your_sample_secret_key_here_17\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-19",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.example",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_18\"\nJWT_SECRET=\"your_sample_secret_key_here_18\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.example chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-ALLOWLIST-20",
+    "type": "negative",
+    "rule": "ALLOWLIST",
+    "file_path": ".env.sample",
+    "content": "DATABASE_URL=\"postgres://username:password@localhost:5432/sample_db_19\"\nJWT_SECRET=\"your_sample_secret_key_here_19\"",
+    "expected_leaked": false,
+    "description": "Tập tin mẫu .env.sample chứa cấu hình giả định"
+  },
+  {
+    "id": "TN-HASH-01",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8500\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-02",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8501\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-03",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8502\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-04",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8503\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-05",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8504\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-06",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8505\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-07",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8506\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-08",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8507\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-09",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8508\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-10",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8509\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-11",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850a\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-12",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850b\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-13",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850c\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-14",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850d\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-15",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850e\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-16",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b850f\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-17",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8510\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-18",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8511\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-19",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8512\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-HASH-20",
+    "type": "negative",
+    "rule": "SAFE_HASH",
+    "file_path": "scripts/build_info.py",
+    "content": "git_commit = \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b8513\"",
+    "expected_leaked": false,
+    "description": "Chuỗi SHA-256 commit hash bình thường"
+  },
+  {
+    "id": "TN-MOCK-01",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_0.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_00\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-02",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_1.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_01\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-03",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_2.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_02\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-04",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_3.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_03\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-05",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_4.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_04\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-06",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_5.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_05\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-07",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_6.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_06\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-08",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_7.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_07\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-09",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_8.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_08\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-10",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_9.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_09\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-11",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_10.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_10\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-12",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_11.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_11\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-13",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_12.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_12\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-14",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_13.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_13\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-15",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_14.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_14\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-16",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_15.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_15\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-17",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_16.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_16\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-18",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_17.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_17\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-19",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_18.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_18\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-MOCK-20",
+    "type": "negative",
+    "rule": "TEST_MOCK",
+    "file_path": "tests/test_auth_service_19.py",
+    "content": "const test_token = \"dummy_mock_Zx8kLm29Qw7Rt5Uh3Vb6Nc4Yp1_19\";\nassert validate(test_token) is True",
+    "expected_leaked": false,
+    "description": "Dữ liệu mock/dummy trong thư mục test"
+  },
+  {
+    "id": "TN-TRACKING-01",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012300\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-02",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012301\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-03",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012302\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-04",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012303\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-05",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012304\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-06",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012305\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-07",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012306\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-08",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012307\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-09",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012308\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-10",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012309\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-11",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012310\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-12",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012311\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-13",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012312\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-14",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012313\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-15",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012314\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-16",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012315\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-17",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012316\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-18",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012317\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-19",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012318\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-TRACKING-20",
+    "type": "negative",
+    "rule": "INVALID_PII",
+    "file_path": "shipping/logistics.py",
+    "content": "const tracking_code = \"999499012319\"; // ma van don chuyen phat nhanh bưu cục",
+    "expected_leaked": false,
+    "description": "Mã vận đơn 12 chữ số ngẫu nhiên không phải CCCD"
+  },
+  {
+    "id": "TN-CODE-01",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_0.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440000\";\nexport default () => <div>Hello 0</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-02",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_1.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440001\";\nexport default () => <div>Hello 1</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-03",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_2.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440002\";\nexport default () => <div>Hello 2</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-04",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_3.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440003\";\nexport default () => <div>Hello 3</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-05",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_4.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440004\";\nexport default () => <div>Hello 4</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-06",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_5.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440005\";\nexport default () => <div>Hello 5</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-07",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_6.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440006\";\nexport default () => <div>Hello 6</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-08",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_7.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440007\";\nexport default () => <div>Hello 7</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-09",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_8.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440008\";\nexport default () => <div>Hello 8</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-10",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_9.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440009\";\nexport default () => <div>Hello 9</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-11",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_10.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440010\";\nexport default () => <div>Hello 10</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-12",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_11.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440011\";\nexport default () => <div>Hello 11</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-13",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_12.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440012\";\nexport default () => <div>Hello 12</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-14",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_13.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440013\";\nexport default () => <div>Hello 13</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-15",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_14.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440014\";\nexport default () => <div>Hello 14</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-16",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_15.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440015\";\nexport default () => <div>Hello 15</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-17",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_16.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440016\";\nexport default () => <div>Hello 16</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-18",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_17.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440017\";\nexport default () => <div>Hello 17</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-19",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_18.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440018\";\nexport default () => <div>Hello 18</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  },
+  {
+    "id": "TN-CODE-20",
+    "type": "negative",
+    "rule": "NORMAL_CODE",
+    "file_path": "components/Widget_19.jsx",
+    "content": "import React from \"react\";\nconst component_id = \"550e8400-e29b-41d4-a716-446655440019\";\nexport default () => <div>Hello 19</div>;",
+    "expected_leaked": false,
+    "description": "Đoạn mã React Component chứa UUID hợp lệ"
+  }
+]
