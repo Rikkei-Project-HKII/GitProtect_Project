@@ -220,5 +220,159 @@ class TestPBI11TaskS302a(unittest.TestCase):
                 self.assertEqual(h.actor_label, "system")
 
 
+
+class TestPBI11TaskS302b(unittest.TestCase):
+    """
+    S3-02b: Viết Pytest kiểm thử AC-03 (Pydantic extra='forbid' từ chối request client chứa actor/changed_by).
+    """
+
+    def setUp(self):
+        self.engine, self.SessionLocal = create_test_db()
+
+        with self.SessionLocal() as db:
+            repo = Repository(
+                id=1,
+                github_repo_id=12345,
+                repo_name="org/test-repo",
+                default_branch="main",
+                access_token_encrypted="dummy_pat",
+                repo_url="https://github.com/org/test-repo",
+            )
+            db.add(repo)
+            self.test_alert = SecurityAlert(
+                id=2,
+                repo_id=1,
+                fingerprint="b" * 64,
+                source="gitprotect_scanner",
+                rule_name="AWS Secret Key",
+                severity="critical",
+                file_path="src/aws.py",
+                status="open",
+                detected_at=datetime.now(timezone.utc).replace(tzinfo=None),
+            )
+            db.add(self.test_alert)
+            db.commit()
+
+        def override_get_db():
+            db = self.SessionLocal()
+            try:
+                yield db
+            finally:
+                db.close()
+
+        app.dependency_overrides[get_db] = override_get_db
+        self.client = TestClient(app)
+
+    def tearDown(self):
+        app.dependency_overrides.clear()
+        self.engine.dispose()
+
+    # --- Pydantic Schema direct validation tests ---
+
+    def test_ac03_schema_rejects_actor(self):
+        """Schema từ chối trường 'actor' với extra_forbidden."""
+        from pydantic import ValidationError
+        from app.modules.alerts.schemas import AlertStatusUpdateRequest
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, actor="attacker")
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+    def test_ac03_schema_rejects_changed_by(self):
+        """Schema từ chối trường 'changed_by' với extra_forbidden."""
+        from pydantic import ValidationError
+        from app.modules.alerts.schemas import AlertStatusUpdateRequest
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, changed_by="superadmin")
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+    def test_ac03_schema_rejects_actor_type_and_label(self):
+        """Schema từ chối trường 'actor_type' và 'actor_label'."""
+        from pydantic import ValidationError
+        from app.modules.alerts.schemas import AlertStatusUpdateRequest
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, actor_type="system")
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, actor_label="internal_operator")
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+    def test_ac03_schema_rejects_operator_name_and_arbitrary_fields(self):
+        """Schema từ chối trường 'operator_name' và các trường tuỳ ý."""
+        from pydantic import ValidationError
+        from app.modules.alerts.schemas import AlertStatusUpdateRequest
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, operator_name="Admin User")
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+        with self.assertRaises(ValidationError) as ctx:
+            AlertStatusUpdateRequest(new_status=AlertStatusEnum.IN_REVIEW, is_admin=True)
+        self.assertIn("extra_forbidden", str(ctx.exception))
+
+    # --- HTTP API Integration via TestClient ---
+
+    def test_ac03_http_rejects_payload_with_actor(self):
+        """HTTP PATCH từ chối payload kèm 'actor' -> Trả về 422 Unprocessable Entity."""
+        res = self.client.patch(
+            "/api/v1/alerts/2/status",
+            json={"new_status": "in_review", "actor": "fake_internal_operator"}
+        )
+        self.assertEqual(res.status_code, 422)
+        self.assertIn("extra_forbidden", res.text)
+
+    def test_ac03_http_rejects_payload_with_changed_by(self):
+        """HTTP PATCH từ chối payload kèm 'changed_by' -> Trả về 422 Unprocessable Entity."""
+        res = self.client.patch(
+            "/api/v1/alerts/2/status",
+            json={"new_status": "in_review", "changed_by": "root"}
+        )
+        self.assertEqual(res.status_code, 422)
+        self.assertIn("extra_forbidden", res.text)
+
+    def test_ac03_http_rejects_payload_with_actor_type_and_label(self):
+        """HTTP PATCH từ chối payload kèm 'actor_type' hoặc 'actor_label' -> Trả về 422."""
+        res1 = self.client.patch(
+            "/api/v1/alerts/2/status",
+            json={"new_status": "in_review", "actor_type": "system"}
+        )
+        self.assertEqual(res1.status_code, 422)
+        self.assertIn("extra_forbidden", res1.text)
+
+        res2 = self.client.patch(
+            "/api/v1/alerts/2/status",
+            json={"new_status": "in_review", "actor_label": "internal_operator"}
+        )
+        self.assertEqual(res2.status_code, 422)
+        self.assertIn("extra_forbidden", res2.text)
+
+    def test_ac03_http_rejects_payload_with_operator_name(self):
+        """HTTP PATCH từ chối payload kèm 'operator_name' -> Trả về 422."""
+        res = self.client.patch(
+            "/api/v1/alerts/2/status",
+            json={"new_status": "in_review", "operator_name": "Nguyen Van B"}
+        )
+        self.assertEqual(res.status_code, 422)
+        self.assertIn("extra_forbidden", res.text)
+
+    def test_ac03_db_state_untouched_after_rejected_requests(self):
+        """Sau khi các request giả mạo actor bị từ chối, CSDL giữ nguyên trạng thái cũ và không có lịch sử rác."""
+        # Gửi nhiều request giả mạo
+        self.client.patch("/api/v1/alerts/2/status", json={"new_status": "resolved", "actor": "hacker"})
+        self.client.patch("/api/v1/alerts/2/status", json={"new_status": "ignored", "changed_by": "admin"})
+
+        with self.SessionLocal() as db:
+            alert = db.query(SecurityAlert).filter(SecurityAlert.id == 2).first()
+            self.assertEqual(alert.status, "open")
+            self.assertIsNone(alert.resolved_at)
+
+            # Không có lịch sử nào được sinh ra
+            hist_count = db.query(AlertStatusHistory).filter(AlertStatusHistory.alert_id == 2).count()
+            self.assertEqual(hist_count, 0)
+
+
 if __name__ == "__main__":
     unittest.main()
