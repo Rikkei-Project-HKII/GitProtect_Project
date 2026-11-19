@@ -513,5 +513,151 @@ class TestPBI11TaskS302c(unittest.TestCase):
             self.assertIsNone(alert.resolved_at)
 
 
+
+class TestPBI11TaskS302d(unittest.TestCase):
+    """
+    S3-02d: Viết Pytest kiểm thử AC-05 (Append-only & chặn tuyệt đối API UPDATE/DELETE lịch sử).
+    """
+
+    def setUp(self):
+        self.engine, self.SessionLocal = create_test_db()
+
+        with self.SessionLocal() as db:
+            repo = Repository(
+                id=1,
+                github_repo_id=12345,
+                repo_name="org/test-repo",
+                default_branch="main",
+                access_token_encrypted="dummy_pat",
+                repo_url="https://github.com/org/test-repo",
+            )
+            db.add(repo)
+            self.test_alert = SecurityAlert(
+                id=4,
+                repo_id=1,
+                fingerprint="d" * 64,
+                source="gitprotect_scanner",
+                rule_name="Private Key Leak",
+                severity="critical",
+                file_path="keys/id_rsa",
+                status="open",
+                detected_at=datetime.now(timezone.utc).replace(tzinfo=None),
+            )
+            db.add(self.test_alert)
+            db.commit()
+
+        def override_get_db():
+            db = self.SessionLocal()
+            try:
+                yield db
+            finally:
+                db.close()
+
+        app.dependency_overrides[get_db] = override_get_db
+        self.client = TestClient(app)
+
+    def tearDown(self):
+        app.dependency_overrides.clear()
+        self.engine.dispose()
+
+    def test_ac05_http_blocks_modification_methods_on_history(self):
+        """AC-05: Chặn tuyệt đối các HTTP method PUT/PATCH/DELETE/POST trên endpoint /history (Trả về 405 Method Not Allowed)."""
+        # PUT
+        res_put = self.client.put("/api/v1/alerts/4/history", json={"note": "hacked"})
+        self.assertEqual(res_put.status_code, 405)
+
+        # PATCH
+        res_patch = self.client.patch("/api/v1/alerts/4/history", json={"note": "hacked"})
+        self.assertEqual(res_patch.status_code, 405)
+
+        # DELETE
+        res_delete = self.client.delete("/api/v1/alerts/4/history")
+        self.assertEqual(res_delete.status_code, 405)
+
+        # POST
+        res_post = self.client.post("/api/v1/alerts/4/history", json={"new_status": "in_review"})
+        self.assertEqual(res_post.status_code, 405)
+
+    def test_ac05_routes_only_allow_get_for_history(self):
+        """AC-05: Router inspection - kiểm tra hệ thống không đăng ký bất kỳ method sửa/xóa nào cho /history."""
+        from app.modules.alerts.router import router
+
+        history_routes = [r for r in router.routes if "/history" in r.path]
+        self.assertTrue(len(history_routes) > 0)
+        allowed_methods = {method for r in history_routes for method in r.methods}
+
+        self.assertEqual(allowed_methods, {"GET"})
+        self.assertNotIn("PUT", allowed_methods)
+        self.assertNotIn("PATCH", allowed_methods)
+        self.assertNotIn("DELETE", allowed_methods)
+        self.assertNotIn("POST", allowed_methods)
+
+    def test_ac05_orm_strictly_blocks_update(self):
+        """AC-05: Ở tầng ORM, can thiệp UPDATE vào bản ghi AlertStatusHistory bị chặn ngay lập tức bởi ValueError."""
+        with self.SessionLocal() as db:
+            entry = AlertStatusHistory(
+                alert_id=4,
+                old_status="open",
+                new_status="in_review",
+                actor_type="internal_operator",
+                actor_label="internal_operator",
+                resolution_note="Bản ghi ban đầu",
+            )
+            db.add(entry)
+            db.commit()
+
+            # Cố tình sửa đổi nội dung
+            entry.resolution_note = "Sửa đổi trái phép nội dung nhật ký kiểm toán"
+            with self.assertRaises(ValueError) as ctx:
+                db.commit()
+            self.assertIn("AC-05 Violation", str(ctx.exception))
+            db.rollback()
+
+    def test_ac05_orm_strictly_blocks_delete(self):
+        """AC-05: Ở tầng ORM, can thiệp DELETE bản ghi AlertStatusHistory bị chặn ngay lập tức bởi ValueError."""
+        with self.SessionLocal() as db:
+            entry = AlertStatusHistory(
+                alert_id=4,
+                old_status="open",
+                new_status="in_review",
+                actor_type="internal_operator",
+                actor_label="internal_operator",
+                resolution_note="Bản ghi kiểm toán",
+            )
+            db.add(entry)
+            db.commit()
+
+            # Cố tình xóa bản ghi
+            with self.assertRaises(ValueError) as ctx:
+                db.delete(entry)
+                db.commit()
+            self.assertIn("AC-05 Violation", str(ctx.exception))
+            db.rollback()
+
+    def test_ac05_get_history_chronological_order(self):
+        """AC-05: GET /api/v1/alerts/{id}/history trả về dữ liệu lịch sử tuần tự thời gian tăng dần."""
+        # Thực hiện 2 lần đổi trạng thái hợp lệ
+        res1 = self.client.patch("/api/v1/alerts/4/status", json={"new_status": "in_review", "resolution_note": "Bắt đầu"})
+        self.assertEqual(res1.status_code, 200)
+
+        res2 = self.client.patch("/api/v1/alerts/4/status", json={"new_status": "resolved", "resolution_note": "Hoàn tất xử lý"})
+        self.assertEqual(res2.status_code, 200)
+
+        # Đọc lịch sử
+        hist_res = self.client.get("/api/v1/alerts/4/history")
+        self.assertEqual(hist_res.status_code, 200)
+        hist_data = hist_res.json()
+
+        self.assertEqual(hist_data["alert_id"], 4)
+        self.assertEqual(hist_data["total"], 2)
+        items = hist_data["items"]
+        self.assertEqual(items[0]["new_status"], "in_review")
+        self.assertEqual(items[1]["new_status"], "resolved")
+
+        # 404 cho alert không tồn tại
+        not_found_res = self.client.get("/api/v1/alerts/99999/history")
+        self.assertEqual(not_found_res.status_code, 404)
+
+
 if __name__ == "__main__":
     unittest.main()
