@@ -659,5 +659,265 @@ class TestPBI11TaskS302d(unittest.TestCase):
         self.assertEqual(not_found_res.status_code, 404)
 
 
+
+class TestPBI11TaskS302e(unittest.TestCase):
+    """
+    S3-02e: Pentest an toàn:
+    1. Giả mạo Webhook HMAC-SHA256 (missing signature, tampered payload, forged key, replay).
+    2. Injection string gây ReDoS (Catastrophic Backtracking) đảm bảo timeout <= 500ms.
+    3. Kiểm tra an ninh CSDL với AES-256-GCM (không rò rỉ plaintext, unique IV, chống tampering, no hardcoded key).
+    """
+
+    def setUp(self):
+        self.engine, self.SessionLocal = create_test_db()
+        self.webhook_secret = "super-secret-webhook-key-pentest"
+
+        with self.SessionLocal() as db:
+            from app.core.security import crypto_service
+            repo = Repository(
+                id=10,
+                github_repo_id=999,
+                repo_name="org/pentest-repo",
+                default_branch="main",
+                access_token_encrypted=crypto_service.encrypt("ghp_testToken12345678901234567890123456"),
+                webhook_secret_encrypted=crypto_service.encrypt(self.webhook_secret),
+                repo_url="https://github.com/org/pentest-repo",
+            )
+            db.add(repo)
+            db.commit()
+
+        def override_get_db():
+            db = self.SessionLocal()
+            try:
+                yield db
+            finally:
+                db.close()
+
+        app.dependency_overrides[get_db] = override_get_db
+        self.client = TestClient(app)
+
+    def tearDown(self):
+        app.dependency_overrides.clear()
+        self.engine.dispose()
+
+    # =========================================================================
+    # 1. PENTEST WEBHOOK HMAC-SHA256
+    # =========================================================================
+
+    def _generate_signature(self, secret: str, body: bytes) -> str:
+        import hmac
+        import hashlib
+        return "sha256=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
+
+    def test_pentest_webhook_hmac_missing_signature_rejected(self):
+        """Pentest Webhook: Gửi webhook không kèm chữ ký X-Hub-Signature-256 -> Bị từ chối 401."""
+        body = b'{"repository": {"id": 999}}'
+        headers = {
+            "X-GitHub-Event": "push",
+            "X-GitHub-Delivery": "delivery-pentest-01",
+        }
+        res = self.client.post("/api/v1/webhooks/github", content=body, headers=headers)
+        self.assertEqual(res.status_code, 401)
+        self.assertIn("Invalid webhook signature", res.text)
+
+    def test_pentest_webhook_hmac_malformed_signature_format_rejected(self):
+        """Pentest Webhook: Gửi signature sai định dạng chuẩn (không bắt đầu bằng sha256=) -> Bị từ chối 401."""
+        body = b'{"repository": {"id": 999}}'
+        headers = {
+            "X-GitHub-Event": "push",
+            "X-GitHub-Delivery": "delivery-pentest-02",
+            "X-Hub-Signature-256": "md5=1234567890abcdef1234567890abcdef",
+        }
+        res = self.client.post("/api/v1/webhooks/github", content=body, headers=headers)
+        self.assertEqual(res.status_code, 401)
+        self.assertIn("Invalid webhook signature", res.text)
+
+    def test_pentest_webhook_hmac_forged_secret_rejected(self):
+        """Pentest Webhook: Giả mạo chữ ký bằng secret của attacker -> Bị từ chối 401."""
+        body = b'{"repository": {"id": 999}}'
+        forged_sig = self._generate_signature("attacker-fake-secret", body)
+        headers = {
+            "X-GitHub-Event": "push",
+            "X-GitHub-Delivery": "delivery-pentest-03",
+            "X-Hub-Signature-256": forged_sig,
+        }
+        res = self.client.post("/api/v1/webhooks/github", content=body, headers=headers)
+        self.assertEqual(res.status_code, 401)
+        self.assertIn("Invalid webhook signature", res.text)
+
+    def test_pentest_webhook_hmac_tampered_payload_rejected(self):
+        """Pentest Webhook: Ký hợp lệ với payload gốc nhưng sửa đổi nội dung body khi gửi -> 401 Mismatch."""
+        original_body = b'{"repository": {"id": 999}, "commits": []}'
+        valid_sig = self._generate_signature(self.webhook_secret, original_body)
+
+        # Attacker chèn thêm dữ liệu vào payload
+        tampered_body = b'{"repository": {"id": 999}, "commits": [], "malicious": true}'
+        headers = {
+            "X-GitHub-Event": "push",
+            "X-GitHub-Delivery": "delivery-pentest-04",
+            "X-Hub-Signature-256": valid_sig,
+        }
+        res = self.client.post("/api/v1/webhooks/github", content=tampered_body, headers=headers)
+        self.assertEqual(res.status_code, 401)
+        self.assertIn("Invalid webhook signature", res.text)
+
+    def test_pentest_webhook_valid_signature_and_replay_protection(self):
+        """Pentest Webhook: Chữ ký hợp lệ -> 200 queued; Replay cùng delivery ID -> duplicate_ignored."""
+        import json
+        from unittest.mock import patch, AsyncMock
+
+        sha = "f" * 40
+        body = json.dumps({
+            "repository": {"id": 999},
+            "ref": "refs/heads/main",
+            "commits": [{"id": sha}]
+        }).encode()
+        sig = self._generate_signature(self.webhook_secret, body)
+        headers = {
+            "X-GitHub-Event": "push",
+            "X-GitHub-Delivery": "delivery-pentest-replay-check",
+            "X-Hub-Signature-256": sig,
+        }
+
+        with patch("app.modules.ingestion.webhook.Redis") as mock_redis_cls, \
+             patch("app.modules.ingestion.webhook.GitHubClient.request", new_callable=AsyncMock, return_value="+diff"):
+            mock_redis = mock_redis_cls.return_value.__aenter__.return_value
+            # Lần 1: chưa tồn tại -> enqueue thành công
+            mock_redis.exists.return_value = False
+            mock_redis.eval.return_value = 1
+
+            res1 = self.client.post("/api/v1/webhooks/github", content=body, headers=headers)
+            self.assertEqual(res1.status_code, 200)
+            self.assertEqual(res1.json()["status"], "queued")
+
+            # Lần 2: Replay attack cùng delivery ID -> Redis phát hiện key đã có
+            mock_redis.exists.return_value = True
+            res2 = self.client.post("/api/v1/webhooks/github", content=body, headers=headers)
+            self.assertEqual(res2.status_code, 200)
+            self.assertEqual(res2.json()["status"], "duplicate_ignored")
+
+    # =========================================================================
+    # 2. PENTEST REGEX REDOS (CATASTROPHIC BACKTRACKING)
+    # =========================================================================
+
+    def test_pentest_redos_catastrophic_backtracking_enforces_timeout(self):
+        """Pentest ReDoS: Mẫu regex lồng nhau (a+)+$ với chuỗi tấn công 'a'*10000 + '!' phải ngắt timeout an toàn <= 500ms."""
+        import time
+        from app.modules.engine.regex_engine import RegexEngine
+        from app.modules.engine.scan_pipeline import ScanPipeline
+
+        # Pattern kinh điển gây Catastrophic Backtracking
+        evil_patterns = [r"^(a+)+$"]
+        engine = RegexEngine(patterns=evil_patterns, timeout=0.01)
+
+        # Input tấn công
+        evil_input = "a" * 10000 + "!"
+
+        start_time = time.perf_counter()
+        scan_res = engine.scan(evil_input)
+        elapsed = time.perf_counter() - start_time
+
+        # Kiểm tra RegexEngine ngắt an toàn với timed_out = True
+        self.assertTrue(scan_res["timed_out"])
+        self.assertEqual(scan_res["error"], "REGEX_TIMEOUT")
+        self.assertLess(elapsed, 0.5, f"ReDoS không ngắt kịp thời gian: {elapsed}s")
+
+        # Kiểm tra ScanPipeline ném TimeoutError an toàn
+        pipeline = ScanPipeline(engine)
+        with self.assertRaises(TimeoutError):
+            pipeline.scan(evil_input, "app.py")
+
+    def test_pentest_redos_long_repeated_payload_on_standard_rules(self):
+        """Pentest ReDoS: Chuỗi độc hại dài 50,000 ký tự lặp lại quét qua RegexEngine chuẩn hoàn thành hoặc timeout an toàn < 0.6s."""
+        import time
+        from app.modules.engine.regex_engine import RegexEngine
+
+        engine = RegexEngine(timeout=0.4)
+        malicious_input = 'ghp_' + ('_' * 25000) + ' ' + ('AKIA' + '0' * 25000)
+
+        start_time = time.perf_counter()
+        try:
+            res = engine.scan(malicious_input)
+            self.assertIsInstance(res, dict)
+        except TimeoutError:
+            pass  # Timeout an toàn chấp nhận được
+        elapsed = time.perf_counter() - start_time
+
+        self.assertLess(elapsed, 0.6, f"Engine bị nghẽn CPU bởi payload lớn: {elapsed}s")
+
+    # =========================================================================
+    # 3. PENTEST AES-256-GCM DATABASE CIPHERTEXT SECURITY
+    # =========================================================================
+
+    def test_pentest_aes256gcm_ciphertext_never_exposes_plaintext_in_db(self):
+        """Pentest AES-256-GCM: Dữ liệu nhạy cảm lưu trong CSDL tuyệt đối không chứa raw token plaintext."""
+        with self.SessionLocal() as db:
+            repo = db.query(Repository).filter(Repository.id == 10).first()
+            # Raw PAT được lưu là "ghp_testToken12345678901234567890123456"
+            self.assertNotIn("ghp_", repo.access_token_encrypted)
+            self.assertNotIn("testToken", repo.access_token_encrypted)
+            self.assertNotIn(self.webhook_secret, repo.webhook_secret_encrypted)
+
+    def test_pentest_aes256gcm_unique_nonce_per_encryption(self):
+        """Pentest AES-256-GCM: Hai lần mã hóa cùng một plaintext sinh ra 2 ciphertext hoàn toàn khác nhau (chống IV reuse)."""
+        from app.core.security import crypto_service
+
+        token = "ghp_ConsistentPlaintextToken1234567890"
+        c1 = crypto_service.encrypt(token)
+        c2 = crypto_service.encrypt(token)
+
+        self.assertNotEqual(c1, c2, "LỖI AN NINH NGHIÊM TRỌNG: Tái sử dụng IV/Nonce trong AES-256-GCM!")
+        # Nhưng cả hai đều giải mã ra đúng plaintext ban đầu
+        self.assertEqual(crypto_service.decrypt(c1), token)
+        self.assertEqual(crypto_service.decrypt(c2), token)
+
+    def test_pentest_aes256gcm_tampered_ciphertext_fails_closed(self):
+        """Pentest AES-256-GCM: Sửa đổi bit trong ciphertext (Bit-flipping attack) -> InvalidTag, tuyệt đối không trả về dữ liệu rác."""
+        import base64
+        from cryptography.exceptions import InvalidTag
+        from app.core.security import crypto_service
+
+        token = "ghp_SecretToProtectAgainstTampering123"
+        encrypted_b64 = crypto_service.encrypt(token)
+        raw_bytes = bytearray(base64.b64decode(encrypted_b64))
+
+        # Attacker đảo 1 byte trong ciphertext payload
+        raw_bytes[15] ^= 0xFF
+        tampered_b64 = base64.b64encode(bytes(raw_bytes)).decode()
+
+        with self.assertRaises(InvalidTag):
+            crypto_service.decrypt(tampered_b64)
+
+    def test_pentest_aes256gcm_wrong_master_key_fails_closed(self):
+        """Pentest AES-256-GCM: Cố tình giải mã bằng khóa AES khác -> Ném InvalidTag."""
+        from cryptography.exceptions import InvalidTag
+        from app.core.security import CryptoService, crypto_service
+
+        token = "ghp_SecretConfidentialData12345"
+        encrypted_b64 = crypto_service.encrypt(token)
+
+        # Attacker khởi tạo service với master key ngẫu nhiên khác
+        other_key = CryptoService.generate_master_key_hex()
+        attacker_service = CryptoService(master_key_hex=other_key)
+
+        with self.assertRaises(InvalidTag):
+            attacker_service.decrypt(encrypted_b64)
+
+    def test_pentest_aes256gcm_no_hardcoded_fallback_key(self):
+        """Pentest AES-256-GCM: Khi thiếu biến môi trường, hệ thống ném ValueError, tuyệt đối không dùng fallback key cố định."""
+        import os
+        from unittest.mock import patch
+        from app.core.security import CryptoService
+        import app.core.security as security_mod
+        import app.core.config as config_mod
+
+        with patch.dict(os.environ, {}, clear=True), \
+             patch.object(config_mod.settings, "AES_MASTER_KEY_HEX", None), \
+             patch.object(security_mod.settings, "AES_MASTER_KEY_HEX", None):
+            with self.assertRaises(ValueError) as ctx:
+                CryptoService(master_key_hex=None)
+            self.assertIn("Thiếu cấu hình khóa AES Master Key", str(ctx.exception))
+
+
 if __name__ == "__main__":
     unittest.main()
