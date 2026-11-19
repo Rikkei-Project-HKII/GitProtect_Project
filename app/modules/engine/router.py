@@ -1,10 +1,9 @@
 from typing import Optional
-from fastapi import Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from redis.exceptions import RedisError
 from app.db.session import get_db
 from app.modules.engine import initial_scan
 from app.modules.engine.scan_alerts import repository, sync_native
-from fastapi import APIRouter, HTTPException, status
 from app.core.enums import SeverityEnum
 from app.modules.engine.schemas import (
     ScanJobTriggerResponse, ScanJobStatusResponse,
