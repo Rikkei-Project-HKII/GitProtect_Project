@@ -272,6 +272,8 @@ class ScanPipeline:
                 continue
             candidates = []
             for secret_match in secrets:
+                if time.perf_counter() >= deadline:
+                    raise TimeoutError("SCAN_TIMEOUT")
                 if secret_match.start() in used_secrets:
                     continue
                 gap = max(0, secret_match.start() - m.end(), m.start() - secret_match.end())
@@ -387,9 +389,14 @@ class ScanPipeline:
 
         return findings, occupied_spans
 
-    def scan(self, content: str, file_path: str) -> dict:
+    def scan(self, content: str, file_path: str, *, time_budget: float | None = None) -> dict:
         started_at = time.perf_counter()
-        deadline = started_at + self.regex_engine.timeout
+        budget = self.regex_engine.timeout
+        if time_budget is not None:
+            budget = min(budget, time_budget)
+        if budget <= 0:
+            raise TimeoutError("SCAN_TIMEOUT")
+        deadline = started_at + budget
         return self._scan(content, file_path, started_at, deadline)
 
     def _scan(self, content: str, file_path: str, started_at: float, deadline: float) -> dict:

@@ -4,6 +4,8 @@ import { KpiCards, TrendChart, RepoBreakdownChart } from '../components/dashboar
 import AlertList from '../components/dashboard/AlertList';
 import AlertDetailModal from '../components/dashboard/AlertDetailModal';
 
+import AuthorAuditPanel from '../components/dashboard/AuthorAuditPanel';
+
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState(null);
   const [repos, setRepos] = useState([]);
@@ -22,6 +24,7 @@ export default function DashboardPage() {
         <div className="lg:col-span-2"><TrendChart /></div>
         <RepoBreakdownChart items={repos} />
       </div>
+      <AuthorAuditPanel />
       <AlertList repos={repos} onSelect={setSelectedId} />
       {selectedId && <AlertDetailModal alertId={selectedId} onClose={() => setSelectedId(null)} />}
     </div>
