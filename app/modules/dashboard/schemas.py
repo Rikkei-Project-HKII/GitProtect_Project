@@ -54,6 +54,9 @@ class CommitAuthorAuditItem(BaseModel):
     commit_sha: str
     author_name: str
     author_email: str
+    committer_name: str
+    committer_email: str
+    reasons: List[str]
     signature_verified: bool
     email_spoofing_flag: bool
     spoofing_notice: Optional[str] = None
@@ -62,6 +65,8 @@ class CommitAuthorAuditItem(BaseModel):
 class AuthorAuditResponse(BaseModel):
     repo_id: int
     allowed_email_domains: List[str]
+    page: int
+    page_size: int
     total_commits_audited: int
     spoofing_violations_count: int
     items: List[CommitAuthorAuditItem]

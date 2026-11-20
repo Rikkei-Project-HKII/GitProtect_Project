@@ -30,7 +30,7 @@ def trigger_scan(repo_id: int, db=Depends(get_db)):
         raise HTTPException(503, "Scan queue unavailable") from None
 
 @router.post("/scan/evaluate-text", response_model=EvaluateTextResponse, summary="Kiểm tra nhanh đoạn mã nguồn theo pipeline 3 lớp & 7 quy tắc (FR-06, FR-07, FR-08)")
-async def evaluate_text(req: EvaluateTextRequest):
+def evaluate_text(req: EvaluateTextRequest):
     try:
         return DetectionEngineService.evaluate_snippet(req.content, req.file_path)
     except TimeoutError:
