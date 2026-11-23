@@ -9,9 +9,9 @@ class Settings(BaseModel):
     
     MYSQL_HOST: str = os.getenv("MYSQL_HOST", "localhost")
     MYSQL_PORT: int = int(os.getenv("MYSQL_PORT", 3306))
-    MYSQL_USER: str = os.getenv("MYSQL_USER", "gitprotect_user")
-    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD", "gitprotect_pass")
-    MYSQL_DB: str = os.getenv("MYSQL_DB", "gitprotect_db")
+    MYSQL_USER: str = os.getenv("MYSQL_USER", "gitprotect")
+    MYSQL_PASSWORD: str = os.getenv("MYSQL_PASSWORD", "gitprotect123")
+    MYSQL_DB: str = os.getenv("MYSQL_DATABASE") or os.getenv("MYSQL_DB", "gitprotect")
     
     REDIS_HOST: str = os.getenv("REDIS_HOST", "localhost")
     REDIS_PORT: int = int(os.getenv("REDIS_PORT", 6379))
