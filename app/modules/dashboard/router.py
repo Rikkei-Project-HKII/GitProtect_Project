@@ -29,8 +29,19 @@ def get_trend(
     return DashboardService.get_trend(db, granularity, days)
 
 
-@router.get("/export", summary="Xuất báo cáo an ninh (CSV/PDF)")
-def export_report(format: str = Query("csv", pattern="^(csv|pdf)$")):
+@router.get("/export", summary="Xuất báo cáo an ninh (CSV/PDF) - S3-08a, S3-08b")
+def export_report(
+    format: str = Query("csv", pattern="^(csv|pdf)$"),
+    db: Session = Depends(get_db)
+):
     if format == "csv":
         return Response(content="id,repo_name,rule_name,severity,secret_masked\n", media_type="text/csv")
-    return Response(content=b"%PDF-1.4 Mock Export Content", media_type="application/pdf")
+    pdf_bytes = DashboardService.generate_security_pdf(db)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={
+            "Content-Disposition": "attachment; filename=GitProtect_Security_Report.pdf",
+            "Access-Control-Expose-Headers": "Content-Disposition"
+        }
+    )

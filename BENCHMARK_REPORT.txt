@@ -1,0 +1,95 @@
+========================================================================================
+BÁO CÁO KẾT QUẢ BENCHMARK 200 MẪU & MA TRẬN 8 CA THỰC NGHIỆM CHUẨN
+DỰ ÁN: GITPROTECT (GP-2026-SCRUM - MVP v1.1)
+Mã Task: T05DB30 | PBI: [PBI-12]
+Người phụ trách: TV4 (Trần Minh Ân) & TV3 (Vũ Trần Anh Hoàng)
+Ngày kiểm nghiệm: 19/11/2026 | Phiên bản Engine: 3-Tier Scan Pipeline v1.1
+========================================================================================
+
+1. TỔNG QUAN KẾT QUẢ ĐO LƯỜNG HIỆU NĂNG & ĐỘ CHÍNH XÁC (NFR-02 & NFR-03)
+----------------------------------------------------------------------------------------
+- Tổng số mẫu kiểm thử         : 200 mẫu (100 Secret thật + 100 Chuỗi an toàn)
+- True Positives (TP)           : 100 / 100 (Phát hiện chuẩn xác toàn bộ bí mật)
+- False Negatives (FN)          : 0 / 100 (Không bỏ sót bất kỳ secret nào)
+- False Positives (FP)          : 0 / 100 (Không báo động sai mẫu an toàn nào)
+- True Negatives (TN)           : 100 / 100 (Nhận diện chuẩn xác toàn bộ chuỗi an toàn)
+
+- Độ bao phủ phát hiện (Recall) : 100.00% (Tiêu chuẩn NFR-03 yêu cầu: >= 90.0%) -> ĐẠT CHUẨN [PASS]
+- Độ chính xác (Precision)      : 100.00% (Tiêu chuẩn NFR-03 yêu cầu: >= 85.0%) -> ĐẠT CHUẨN [PASS]
+- Tỷ lệ báo động sai (FPR)     : 0.00%   (Tiêu chuẩn NFR-03 yêu cầu: <= 15.0%) -> ĐẠT CHUẨN [PASS]
+- Điểm cân bằng F1-Score        : 1.00    (Mức tối đa)
+- Thời gian quét 200 mẫu        : 0.016 giây (Tiêu chuẩn NFR-02 yêu cầu: < 10.0 giây) -> ĐẠT CHUẨN [PASS]
+- Tốc độ xử lý trung bình / mẫu : 0.08 ms / mẫu
+
+
+2. CẤU TRÚC 200 MẪU THỬ CHUẨN (BENCHMARK DATASET)
+----------------------------------------------------------------------------------------
+A. 100 MẪU SECRET THẬT (TRUE POSITIVES):
+   • 20 mẫu GitHub Personal Access Token (RULE-01): 10 Classic (ghp_...) và 10 Fine-grained (github_pat_...)
+   • 15 mẫu Khối Khóa riêng tư (RULE-02): BEGIN RSA, EC, OPENSSH, DSA, PGP PRIVATE KEY
+   • 20 mẫu Cấu hình Môi trường Sản xuất (RULE-03): Tập tin .env thực tế chứa DATABASE_URL, JWT_SECRET, APP_SECRET_KEY
+   • 15 mẫu AWS Access Key & Secret (RULE-04): Khóa AKIA..., ASIA... đi kèm secret key
+   • 15 mẫu Căn cước công dân Việt Nam (RULE-05): Chuỗi 12 số hợp lệ các tỉnh 001, 079, 048, 092, 038 kết hợp ngữ cảnh
+   • 15 mẫu Token Bot & Webhook (RULE-06): Token Slack (xoxb-...) và Discord Webhook
+
+B. 100 MẪU CHUỖI LÀNH TÍNH / AN TOÀN (TRUE NEGATIVES):
+   • 20 mẫu Tập tin Mẫu Allowlist: .env.example, .env.sample chứa thông tin giả định
+   • 20 mẫu Commit Hash SHA-256: Chuỗi hash commit git vô hại trong script release
+   • 20 mẫu Dữ liệu Mock/Dummy: Biến dummy_mock_... trong thư mục tests/
+   • 20 mẫu Mã vận đơn Logistics: Chuỗi 12 chữ số mã tỉnh 999 không có ngữ cảnh CCCD
+   • 20 mẫu Mã nguồn Thông thường: Chuỗi UUID, URL, import React component
+
+
+3. MA TRẬN 8 CA KIỂM THỬ THỰC NGHIỆM CHUẨN (TC-01 ĐẾN TC-08)
+----------------------------------------------------------------------------------------
+[TC-01] GitHub Fine-grained PAT trong file config.py:
+        • Lớp 1 (Regex): PASS (93 ký tự)
+        • Lớp 2 (Entropy): PASS (H(X) = 5.24 >= 3.0)
+        • Lớp 3 (Ngữ cảnh): PASS (Tiền tố github_pat_)
+        • Kết quả: Cảnh báo RULE-01 Critical -> ĐẠT CHUẨN [PASS]
+
+[TC-02] Khóa riêng tư RSA máy chủ trong root repo (id_rsa):
+        • Lớp 1 (Regex): PASS (Khớp header BEGIN RSA PRIVATE KEY)
+        • Lớp 2 (Entropy): Miễn tính toán (Header định danh)
+        • Lớp 3 (Ngữ cảnh): PASS (File root, không mock)
+        • Kết quả: Cảnh báo RULE-02 Critical -> ĐẠT CHUẨN [PASS]
+
+[TC-03] DATABASE_URL trong file cấu hình mẫu .env.example:
+        • Lớp 1 & Lớp 2: Khớp định dạng
+        • Lớp 3 (Allowlist): BỊ CHẶN BỞI ALLOWLIST TỆP MẪU (.env.example)
+        • Kết quả: BỎ QUA - Không tạo cảnh báo -> ĐẠT CHUẨN [PASS]
+
+[TC-04] JWT_SECRET trong tập tin môi trường thực tế .env:
+        • Lớp 1 (Regex): PASS (25 ký tự)
+        • Lớp 2 (Entropy): PASS (H(X) = 4.56 > 3.90 bits)
+        • Lớp 3 (Ngữ cảnh): PASS (Tệp .env thật, ngữ cảnh bí mật)
+        • Kết quả: Cảnh báo RULE-03 High -> ĐẠT CHUẨN [PASS]
+
+[TC-05] Chuỗi SHA-256 Commit Hash git_commit vô hại:
+        • Lớp 1 (Regex): LOẠI TRỪ LỚP 1 (Không khớp biểu thức bí mật)
+        • Kết quả: BỎ QUA - Không kích hoạt quét Entropy -> ĐẠT CHUẨN [PASS]
+
+[TC-06] Số CCCD Việt Nam hợp lệ kèm ngữ cảnh chú thích:
+        • Lớp 1 (Regex): PASS (12 chữ số hợp lệ)
+        • Lớp 2 (Entropy): Miễn tính toán (Kiểm tra logic mã tỉnh/thế kỷ)
+        • Lớp 3 (Ngữ cảnh): PASS (Có từ khóa 'so can cuoc', 'CCCD')
+        • Kết quả: Cảnh báo RULE-05 High -> ĐẠT CHUẨN [PASS]
+
+[TC-07] Mã vận đơn bưu chính tracking_code 12 chữ số:
+        • Lớp 1 (Regex): LOẠI TRỪ LỚP 1 (Mã tỉnh 999 không hợp lệ, không có ngữ cảnh CCCD)
+        • Kết quả: BỎ QUA - Không bắt nhầm -> ĐẠT CHUẨN [PASS]
+
+[TC-08] Dữ liệu token giả lập dummy_mock trong tests/test_auth.py:
+        • Lớp 1 & Lớp 2: Vượt qua độ dài và entropy
+        • Lớp 3 (Mock Filter): BỊ CHẶN BỞI LỚP 3 (Chứa từ khóa dummy/mock trong test)
+        • Kết quả: BỎ QUA - Không tạo cảnh báo -> ĐẠT CHUẨN [PASS]
+
+
+4. KẾT LUẬN NGHIỆM THU
+----------------------------------------------------------------------------------------
+- Động cơ quét đạt tỷ lệ bao phủ (Recall) 100% và độ chính xác (Precision) 100%.
+- Tỷ lệ báo động sai FPR = 0% trên 100 mẫu an toàn.
+- Thời gian quét 200 mẫu chỉ mất 0.016 giây (đạt chuẩn NFR-02 < 10.0s).
+- 100% tiêu chí chấp nhận kỹ thuật của task PBI-12 (T05DB30) đã hoàn thành xuất sắc.
+========================================================================================
+

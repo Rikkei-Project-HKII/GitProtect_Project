@@ -1,0 +1,103 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 1240 >>
+stream
+q
+0.06 0.09 0.16 rg
+0 710 612 82 re f
+0.06 0.72 0.50 rg
+36 740 32 32 re f
+1 1 1 rg
+/F1 15 Tf
+42 750 Td
+(GP) Tj
+/F1 16 Tf
+40 0 Td
+(GITPROTECT SECURITY OPERATIONS DASHBOARD) Tj
+/F2 9 Tf
+0 -16 Td
+(Task S3-08a / S3-08b: Multi-Repository High-Graphics PDF Report - MVP v1.1) Tj
+0.95 0.3 0.3 rg
+/F1 10 Tf
+330 16 Td
+(CONFIDENTIAL) Tj
+Q
+q
+0.97 0.98 0.99 rg
+36 570 540 120 re f
+0.85 0.90 0.95 RG
+36 570 540 120 re s
+0.1 0.1 0.1 rg
+/F1 11 Tf
+50 665 Td
+(1. EXECUTIVE SECURITY SUMMARY & VECTOR METRICS (S3-08a)) Tj
+/F2 9 Tf
+0 -18 Td
+(Total Repos Monitored: 4   |   Total Leaks Detected: 28   |   Open Alerts: 15) Tj
+0 -14 Td
+(Risk Distribution: Critical: 3 (10pts) | High: 8 (5pts) | Medium: 12 (2pts) | Low: 5 (1pt)) Tj
+0.94 0.27 0.27 rg
+60 595 120 14 re f
+0.97 0.45 0.09 rg
+190 595 90 14 re f
+0.96 0.62 0.04 rg
+290 595 70 14 re f
+0.23 0.51 0.96 rg
+370 595 40 14 re f
+Q
+q
+/F1 11 Tf
+36 530 Td
+(2. DETAILED LEAK FINDINGS WITH DATA MASKING (S3-08b / NFR-01)) Tj
+/F2 8.5 Tf
+0 -22 Td
+(ID   Repository                Rule Triggered         Severity    Secret Masked (NFR-01)     Status) Tj
+0 -16 Td
+(01   organization/backend-api  RULE-01: GitHub PAT    CRITICAL    ghp_****1a2b               OPEN) Tj
+0 -14 Td
+(02   organization/backend-api  RULE-02: Private Key   CRITICAL    -----BEGIN **** KEY-----   IN_REVIEW) Tj
+0 -14 Td
+(03   organization/payment-api  RULE-03: .env Secret   HIGH        postgres://user:****@prod  OPEN) Tj
+0 -14 Td
+(04   organization/payment-api  RULE-04: AWS Key       CRITICAL    AKIA****5E12               RESOLVED) Tj
+0 -14 Td
+(05   organization/crm-portal   RULE-05: CCCD VN       HIGH        0010****2345               FALSE_POSITIVE) Tj
+0 -14 Td
+(06   organization/notify-bot   RULE-06: Slack Bot     HIGH        xoxb-****uvwx              RESOLVED) Tj
+0 -14 Td
+(07   organization/crm-portal   RULE-07: High Entropy  MEDIUM      s9F#****8WqA               IN_REVIEW) Tj
+0 -30 Td
+(Compliance Notice: All secrets strictly masked. Plaintext credentials never stored or exported.) Tj
+Q
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000244 00000 n 
+0000001538 00000 n 
+0000001613 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+1683
+%%EOF
+

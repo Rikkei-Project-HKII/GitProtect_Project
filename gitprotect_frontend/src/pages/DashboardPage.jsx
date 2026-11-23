@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AlertCircle, RefreshCw, GitBranch, Bell, Shield } from 'lucide-react';
+import { AlertCircle, RefreshCw, GitBranch, Bell, Shield, FileDown } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { dashboardApi } from '../api/dashboardApi';
 import KpiCards from '../components/dashboard/KpiCards';
@@ -10,6 +10,7 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 export default function DashboardPage() {
   const [metrics, setMetrics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const [error, setError] = useState('');
 
   const loadData = async () => {
@@ -22,6 +23,26 @@ export default function DashboardPage() {
       setError(err.message || 'Không thể tải số liệu thống kê Dashboard.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleExportPdf = async () => {
+    try {
+      setExporting(true);
+      const res = await dashboardApi.exportReport('pdf');
+      const blob = new Blob([res], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'GitProtect_Security_Report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert('Không thể xuất báo cáo PDF: ' + (err.message || 'Lỗi không xác định'));
+    } finally {
+      setExporting(false);
     }
   };
 
@@ -48,6 +69,16 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleExportPdf}
+            disabled={exporting}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-medium text-emerald-700 bg-emerald-50 border border-emerald-300 rounded-lg hover:bg-emerald-100 transition shadow-sm disabled:opacity-50"
+            title="Xuất báo cáo PDF đồ họa cao (S3-08a, S3-08b)"
+          >
+            <FileDown className={`w-4 h-4 ${exporting ? 'animate-bounce' : ''}`} />
+            {exporting ? 'Đang tải PDF...' : 'Xuất Báo cáo PDF'}
+          </button>
           <button
             type="button"
             onClick={loadData}
