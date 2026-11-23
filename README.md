@@ -1,71 +1,94 @@
-# GitProtect Backend Service (GP-2026-SCRUM - MVP v1.1)
+# GitProtect Full-Stack Platform (GP-2026-SCRUM - MVP v1.1)
 
-Kiến trúc backend phân lớp chuẩn công nghiệp (Production Modular Architecture) phục vụ đồ án GitProtect.
+Hệ thống Giám sát An toàn, Kết nối GitHub Repository & Quét Bí mật Mã nguồn Tự động.
 
-## 1. Cấu trúc thư mục theo phân hệ (Modules)
+---
+
+## 1. Cấu Trúc Mã Nguồn
 
 ```text
-gitprotect_backend/
-├── app/
+GitProtect/
+├── app/                        # Mã nguồn FastAPI Backend phân lớp (MOD-01 đến MOD-04)
 │   ├── core/                  # Cấu hình chung, mã hóa AES-256-GCM & Enums
-│   │   ├── config.py          # Biến môi trường, database, redis settings
-│   │   ├── enums.py           # 7 Enums chuẩn hóa CSDL (Severity, Status, ActorType...)
-│   │   └── security.py        # CryptoService AES-256-GCM kèm IV 12 bytes ngẫu nhiên
 │   ├── modules/
-│   │   ├── ingestion/         # [MOD-01 - TV2] Cổng GitHub Webhook & Kết nối PAT
-│   │   │   ├── schemas.py     # Request/Response Pydantic schemas MOD-01
-│   │   │   ├── service.py     # Webhook verification & PAT onboarding logic
-│   │   │   └── router.py      # Endpoints: /webhooks/github, /repos/connect, /repos
-│   │   ├── engine/            # [MOD-02 - TV3] Động cơ quét 3 lớp & Shannon Entropy
-│   │   │   ├── schemas.py     # Request/Response Pydantic schemas MOD-02
-│   │   │   ├── service.py     # Tính Shannon Entropy H(X) & Pipeline 3 lớp
-│   │   │   └── router.py      # Endpoints: /scan/trigger, /evaluate-text, /rules...
-│   │   ├── alerts/            # [MOD-03 - TV1] Quản lý vòng đời cảnh báo & Audit Trail
-│   │   │   ├── schemas.py     # AlertStatusUpdateRequest (extra='forbid', note >= 10)
-│   │   │   ├── service.py     # Atomic Database Transaction & Append-only history
-│   │   │   └── router.py      # Endpoints: /alerts, /alerts/{id}, /status, /history
-│   │   └── dashboard/         # [MOD-04 - TV4] Giám sát KPI & Kiểm toán tác giả commit
-│   │       ├── schemas.py     # Dashboard metrics, trend & spoofing schemas
-│   │       ├── service.py     # Tổng hợp số liệu KPI, tính điểm rủi ro Risk Score
-│   │       └── router.py      # Endpoints: /dashboard/metrics, /trend, /export...
-│   └── api/
-│       └── v1.py              # Gom toàn bộ 4 router phân hệ vào prefix /api/v1
-├── tests/                     # Thư mục unit test & integration test (AC-01..AC-05)
-├── main.py                    # Khởi tạo FastAPI Application
-├── requirements.txt           # Thư viện phụ thuộc
-└── README.md                  # Hướng dẫn chạy & phân công
+│   │   ├── ingestion/         # [MOD-01] GitHub Webhook & Kết nối PAT
+│   │   ├── engine/            # [MOD-02] Động cơ quét 3 lớp & Shannon Entropy
+│   │   ├── alerts/            # [MOD-03] Quản lý vòng đời cảnh báo & Audit Trail (AC-01..05)
+│   │   └── dashboard/         # [MOD-04] KPI Dashboard & Xuất báo cáo CSV/PDF
+│   ├── api/v1.py              # Gom toàn bộ 4 phân hệ vào prefix /api/v1
+│   ├── models/                # SQLAlchemy ORM models (4 bảng lõi)
+│   └── db/                    # Session & Alembic metadata
+├── alembic/                    # Database migrations script (MySQL 8)
+├── alembic.ini                 # Cấu hình Alembic migration
+├── gitprotect_frontend/        # Website Dashboard Single Page Application (React, Vite, Tailwind)
+│   ├── src/                   # Components, Pages (Dashboard, Repositories, Alerts), API clients
+│   ├── Dockerfile             # Multi-stage production build (Node 20 -> Nginx)
+│   └── nginx.conf             # Cấu hình SPA routing try_files cho React Router
+├── nginx/                      # Nginx Gateway Reverse Proxy (Môi trường Staging)
+│   ├── nginx.conf             # TLS 1.2/1.3, SSL Termination, Proxy /api/ sang backend, / sang frontend
+│   └── ssl/                   # Chứng chỉ số tự ký (staging.crt, staging.key)
+├── tests/                      # Bộ kiểm thử tự động (82 test cases unit & integration)
+├── Dockerfile                  # Dockerfile đóng gói Backend & Worker (Python 3.11-slim)
+├── entrypoint.sh               # Entrypoint script tự động chờ DB và chạy alembic upgrade head
+├── docker-compose.yml          # Cấu hình Docker Compose Staging full-stack 6 services
+├── .env.example                # Khai báo mẫu toàn bộ biến môi trường
+├── requirements.txt            # Thư viện phụ thuộc Python
+└── main.py                     # Entrypoint chạy trực tiếp Backend API
 ```
 
-## 2. Hướng dẫn chạy
+---
+
+## 2. Triển Khai Môi Trường Staging Bằng Docker Compose (S3-06a)
+
+Khởi động toàn bộ 6 container (MySQL 8, Redis 7, Backend, Worker, Frontend React, Nginx Reverse Proxy TLS 1.2+) chỉ với một lệnh:
 
 ```bash
-# Cài đặt thư viện
-pip install -r requirements.txt
+# 1. Khởi tạo file cấu hình biến môi trường
+cp .env.example .env
 
-# Khởi chạy Backend API
-python3 main.py
-# Hoặc: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+# 2. Xây dựng và khởi chạy toàn bộ 6 services trong nền
+docker compose up -d --build
+
+# 3. Kiểm tra trạng thái hoạt động của các container
+docker compose ps
 ```
 
-- Truy cập Swagger UI trực quan: `http://localhost:8000/docs`
-- Truy cập ReDoc tài liệu chi tiết: `http://localhost:8000/redoc`
+Sau khi khởi chạy thành công:
+- **Giao diện Website Dashboard:** `https://localhost` (Giao thức bảo mật HTTPS với TLS 1.2+)
+- **API Swagger Documentation:** `https://localhost/docs`
+- **OpenAPI JSON Schema:** `https://localhost/openapi.json`
+- **API Xuất Báo cáo CSV:** `https://localhost/api/v1/dashboard/export?format=csv`
+- **API Xuất Báo cáo PDF:** `https://localhost/api/v1/dashboard/export?format=pdf`
 
-### PBI-07 — Initial Scan và GitHub Native Alerts
+---
 
-Khởi động MySQL với migration đã áp dụng và Redis. Dùng cùng cấu hình MySQL,
-Redis và khóa mã hóa PAT cho API và tiến trình worker. Từ thư mục gốc:
+## 3. Khởi Chạy Local Cho Nhà Phát Triển (Local Development)
 
-    python -m app.modules.engine.initial_scan
+```bash
+# 1. Cài đặt thư viện Python
+pip install -r requirements.txt
 
-Kết nối repo với `trigger_initial_scan=true` (mặc định), hoặc gọi
-`POST /api/v1/scan/trigger/{repo_id}`. Endpoint trả 202 và job_id; khi
-job đang chờ/chạy, gọi lại sẽ nhận cùng ID. Theo dõi qua
-`GET /api/v1/scan/jobs/{job_id}`. Redis lưu kết quả cuối 24 giờ.
-Worker lấy snapshot của nhánh mặc định, duyệt các thư mục và quét blob văn bản
-UTF-8 bằng bộ quy tắc PBI-06; bỏ qua binary, symlink và submodule. Nếu worker
-bị dừng, worker khác có thể nhận lại job khi lease 180 giây hết hạn.
+# 2. Thiết lập Master Key AES-256 (64 hex characters)
+export GITPROTECT_AES_MASTER_KEY="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+# Trên Windows PowerShell:
+# $env:GITPROTECT_AES_MASTER_KEY="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
 
-`POST /api/v1/sync/native-alerts/{repo_id}` kéo các trang Secret Scanning và
-Dependabot từ GitHub. PAT cần quyền đọc Contents, Secret scanning alerts và
-Dependabot alerts trên repo đã bật các tính năng tương ứng. Alert và lịch sử
-system được ghi cùng transaction; lỗi từ một nguồn sẽ rollback lần đồng bộ.
+# 3. Khởi động Backend API
+python main.py
+# Swagger trực tiếp: http://localhost:8000/docs
+
+# 4. Khởi động Frontend
+cd gitprotect_frontend
+npm install
+npm run dev
+# Dashboard trực tiếp: http://localhost:5173
+```
+
+---
+
+## 4. Chạy Kiểm Thử Tự Động (Automated Testing)
+
+```bash
+# Chạy toàn bộ 82 kiểm thử tự động
+pytest -v
+```
