@@ -66,11 +66,6 @@ class AuthorAuditResponse(BaseModel):
     spoofing_violations_count: int
     items: List[CommitAuthorAuditItem]
 
-"""MOD-04 Dashboard - Pydantic schemas (S2-09a)."""
-from datetime import date
-from typing import List, Literal
-from pydantic import BaseModel
-
 
 class MetricsResponse(BaseModel):
     critical: int = 0
