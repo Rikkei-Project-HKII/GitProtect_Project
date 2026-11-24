@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitProtect - Báo Cáo An Ninh Mã Nguồn PDF Đồ Họa Cao (S3-08a / S3-08b)</title>
+  <style>
+    @page { size: A4; margin: 15mm; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: #1e293b; background: #f8fafc; margin: 0; padding: 20px; }
+    .report-container { max-width: 800px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; overflow: hidden; }
+    .header { background: #0f172a; color: #ffffff; padding: 24px 32px; display: flex; align-items: center; justify-content: space-between; }
+    .logo-box { display: flex; align-items: center; gap: 12px; }
+    .logo-badge { background: #10b981; color: white; font-weight: bold; font-size: 14px; padding: 6px 10px; border-radius: 6px; }
+    .title { font-size: 18px; font-weight: bold; margin: 0; }
+    .subtitle { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+    .confidential { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 4px; }
+    .content { padding: 32px; }
+    .section-title { font-size: 14px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #334155; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .kpi-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; text-align: center; }
+    .kpi-val { font-size: 24px; font-weight: bold; }
+    .kpi-label { font-size: 11px; color: #64748b; margin-top: 4px; }
+    .crit { color: #ef4444; } .high { color: #f97316; } .med { color: #f59e0b; } .low { color: #3b82f6; }
+    .chart-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 24px; }
+    .bar-row { display: flex; align-items: center; margin-bottom: 10px; font-size: 12px; }
+    .bar-label { width: 140px; color: #475569; }
+    .bar-track { flex: 1; height: 14px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin: 0 12px; }
+    .bar-fill { height: 100%; border-radius: 4px; }
+    .bar-count { width: 60px; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
+    th { background: #f1f5f9; color: #475569; font-weight: 600; text-align: left; padding: 10px 12px; border-bottom: 1px solid #cbd5e1; font-size: 11px; text-transform: uppercase; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; color: #334155; }
+    .masked-code { font-family: monospace; background: #f1f5f9; color: #047857; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+    .badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 12px; }
+    .b-crit { background: #fee2e2; color: #b91c1c; }
+    .b-high { background: #ffedd5; color: #c2410c; }
+    .b-med { background: #fef3c7; color: #b45309; }
+    .footer { border-top: 1px solid #e2e8f0; padding-top: 16px; font-size: 11px; color: #64748b; display: flex; justify-content: space-between; }
+    .btn-print { background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 13px; margin-bottom: 16px; display: inline-block; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div style="text-align: right; max-width: 800px; margin: 0 auto;">
+    <button class="btn-print" onclick="window.print()">🖨️ In / Xuất PDF (A4 Đồ họa cao)</button>
+  </div>
+  <div class="report-container">
+    <div class="header">
+      <div class="logo-box">
+        <span class="logo-badge">GP</span>
+        <div>
+          <div class="title">GITPROTECT SECURITY OPERATIONS DASHBOARD</div>
+          <div class="subtitle">Báo cáo An ninh Mã nguồn Đa Kho lưu trữ (Multi-Repo Executive Report - MVP v1.1)</div>
+        </div>
+      </div>
+      <div class="confidential">CONFIDENTIAL</div>
+    </div>
+    <div class="content">
+      <div class="section-title">1. Tổng quan chỉ số KPI & Phân bổ nguy cơ an ninh (S3-08a)</div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-val crit">3</div><div class="kpi-label">Critical (10đ)</div></div>
+        <div class="kpi-card"><div class="kpi-val high">8</div><div class="kpi-label">High (5đ)</div></div>
+        <div class="kpi-card"><div class="kpi-val med">12</div><div class="kpi-label">Medium (2đ)</div></div>
+        <div class="kpi-card"><div class="kpi-val low">5</div><div class="kpi-label">Low (1đ)</div></div>
+      </div>
+
+      <div class="chart-box">
+        <div style="font-weight: 600; font-size: 12px; margin-bottom: 14px; color: #1e293b;">Biểu đồ Vector phân bổ rủi ro theo trọng số nghiêm trọng</div>
+        <div class="bar-row">
+          <div class="bar-label">Critical (Private Keys, PAT)</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 25%; background: #ef4444;"></div></div>
+          <div class="bar-count crit">3 (10.7%)</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">High (.env, AWS, CCCD VN)</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 40%; background: #f97316;"></div></div>
+          <div class="bar-count high">8 (28.6%)</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Medium (Generic Entropy)</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 60%; background: #f59e0b;"></div></div>
+          <div class="bar-count med">12 (42.9%)</div>
+        </div>
+        <div class="bar-row">
+          <div class="bar-label">Low (Dependencies)</div>
+          <div class="bar-track"><div class="bar-fill" style="width: 25%; background: #3b82f6;"></div></div>
+          <div class="bar-count low">5 (17.8%)</div>
+        </div>
+      </div>
+
+      <div class="section-title">2. Danh mục vi phạm an ninh (Chuẩn mặt nạ dữ liệu S3-08b / NFR-01)</div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Kho lưu trữ</th>
+            <th>Quy tắc phát hiện</th>
+            <th>Mức độ</th>
+            <th>Chuỗi bí mật che (Masked)</th>
+            <th>Trạng thái</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>01</td>
+            <td><strong>organization/backend-api</strong></td>
+            <td>RULE-01: GitHub PAT</td>
+            <td><span class="badge b-crit">Critical</span></td>
+            <td><span class="masked-code">ghp_****1a2b</span></td>
+            <td>Open</td>
+          </tr>
+          <tr>
+            <td>02</td>
+            <td><strong>organization/backend-api</strong></td>
+            <td>RULE-02: Private Key</td>
+            <td><span class="badge b-crit">Critical</span></td>
+            <td><span class="masked-code">-----BEGIN **** KEY-----</span></td>
+            <td>In Review</td>
+          </tr>
+          <tr>
+            <td>03</td>
+            <td><strong>organization/payment-service</strong></td>
+            <td>RULE-03: .env Secret</td>
+            <td><span class="badge b-high">High</span></td>
+            <td><span class="masked-code">postgres://user:****@prod</span></td>
+            <td>Open</td>
+          </tr>
+          <tr>
+            <td>04</td>
+            <td><strong>organization/payment-service</strong></td>
+            <td>RULE-04: AWS Key</td>
+            <td><span class="badge b-crit">Critical</span></td>
+            <td><span class="masked-code">AKIA****5E12</span></td>
+            <td>Resolved</td>
+          </tr>
+          <tr>
+            <td>05</td>
+            <td><strong>organization/crm-portal</strong></td>
+            <td>RULE-05: CCCD Việt Nam</td>
+            <td><span class="badge b-high">High</span></td>
+            <td><span class="masked-code">0010****2345</span></td>
+            <td>False Positive</td>
+          </tr>
+          <tr>
+            <td>06</td>
+            <td><strong>organization/notification-bot</strong></td>
+            <td>RULE-06: Slack Bot Token</td>
+            <td><span class="badge b-high">High</span></td>
+            <td><span class="masked-code">xoxb-****uvwx</span></td>
+            <td>Resolved</td>
+          </tr>
+          <tr>
+            <td>07</td>
+            <td><strong>organization/crm-portal</strong></td>
+            <td>RULE-07: High Entropy</td>
+            <td><span class="badge b-med">Medium</span></td>
+            <td><span class="masked-code">s9F#****8WqA</span></td>
+            <td>In Review</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <div>GitProtect Security Operations Dashboard (MVP v1.1) • Phụ trách: TV4 (Trần Minh Ân)</div>
+        <div>Chuẩn an ninh NFR-01: Tuyệt đối không xuất plaintext secret</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

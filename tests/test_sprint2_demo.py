@@ -32,6 +32,11 @@ def test_signed_push_to_resolved_alert(services, monkeypatch):
     sha = "d" * 40
     async def github_diff(self, method, path, **kw):
         assert method == "GET" and path == "/repos/team/repo/commits/" + sha
+        if not kw.get("headers"):
+            return {"sha": sha, "commit": {
+                "author": {"name": "Author", "email": "author@outside.example"},
+                "committer": {"name": "Reviewer", "email": "reviewer@organization.vn"},
+                "verification": {"verified": True}}}
         return '\n'.join(["diff --git a/config.py b/config.py", "--- a/config.py", "+++ b/config.py",
                           "@@ -4,2 +4,3 @@", " # demo", '-api_key="removed"',
                           '+api_key="aB9xK2pQ7zM4nP8qR5wX"',
@@ -59,6 +64,11 @@ def test_signed_push_to_resolved_alert(services, monkeypatch):
     with sessions() as db:
         assert worker.consume_once(db=db)["new_alerts"] == 0
 
+    report = client.get("/api/v1/audit/authors/1?spoofing_only=true").json()
+    assert report["total_commits_audited"] == report["spoofing_violations_count"] == 1
+    item = report["items"][0]
+    assert (item["commit_sha"], item["signature_verified"], item["spoofing_notice"]) == (sha, True, "Email Spoofing Notice")
+    assert item["committer_name"] == "Reviewer"
     sync = client.post("/api/v1/sync/native-alerts/1").json()
     assert sync["synced_dependabot_alerts"] == 1
     with sessions() as db:

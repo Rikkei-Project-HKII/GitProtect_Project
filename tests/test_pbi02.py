@@ -32,7 +32,10 @@ async def test_push_signature_replay_and_queue_contents():
         async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app), base_url="http://test") as client:
             with patch("app.modules.ingestion.webhook.Redis") as factory, patch(
                 "app.modules.ingestion.webhook.GitHubClient.request", new_callable=AsyncMock,
-                return_value="+secret"
+                side_effect=[{"sha": sha, "commit": {
+                    "author": {"name": "A", "email": "a@organization.vn"},
+                    "committer": {"name": "C", "email": "c@organization.vn"},
+                    "verification": {"verified": True}}}, "+secret"]
             ) as github:
                 url = "/api/v1/webhooks/github"
                 assert (await client.post(url, content=body + b" ", headers=headers)).status_code == 401
@@ -49,7 +52,7 @@ async def test_push_signature_replay_and_queue_contents():
                 replay = await client.post(url, content=body, headers=headers)
                 assert replay.status_code == 200
                 assert replay.json()["status"] == "duplicate_ignored"
-                github.assert_awaited_once()
+                assert github.await_count == 2
                 redis.eval.assert_awaited_once()
     finally:
         app.dependency_overrides.pop(get_db)
@@ -74,7 +77,11 @@ async def test_diff_downloads_are_concurrent_and_keep_commit_order():
         peak = max(peak, running)
         await asyncio.sleep(0.001)
         running -= 1
-        return path
+        if kwargs.get("headers"):
+            return path
+        return {"sha": path.rsplit("/", 1)[1], "commit": {
+            "author": {"name": "A", "email": "a@organization.vn"},
+            "committer": {"name": "C", "email": "c@organization.vn"}, "verification": {"verified": True}}}
 
     with patch("app.modules.ingestion.webhook.Redis") as factory, patch(
         "app.modules.ingestion.webhook.GitHubClient.request", fetch

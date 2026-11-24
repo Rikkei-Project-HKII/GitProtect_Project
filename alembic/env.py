@@ -32,17 +32,8 @@ target_metadata = Base.metadata
 
 
 def get_url() -> str:
-    """
-    Dynamically retrieve the database connection string from environment
-    or application settings.
-    """
-    env_url = os.getenv("DATABASE_URL")
-    if env_url:
-        return env_url
-    return (
-        f"mysql+pymysql://{settings.MYSQL_USER}:{settings.MYSQL_PASSWORD}"
-        f"@{settings.MYSQL_HOST}:{settings.MYSQL_PORT}/{settings.MYSQL_DB}?charset=utf8mb4"
-    )
+    from app.db.session import get_database_url
+    return get_database_url()
 
 
 def run_migrations_offline() -> None:

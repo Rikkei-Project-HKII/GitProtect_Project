@@ -1,7 +1,8 @@
 import { NavLink } from 'react-router-dom';
-import { Shield, LayoutDashboard, GitBranch, Bell } from 'lucide-react';
+import { Shield, LayoutDashboard, GitBranch, Bell, PlayCircle } from 'lucide-react';
 
 const links = [
+  ...(import.meta.env.VITE_DEMO_MODE === 'true' ? [{ to: '/demo', label: 'Demo chức năng', icon: PlayCircle }] : []),
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/repos', label: 'Kho lưu trữ', icon: GitBranch },
   { to: '/alerts', label: 'Cảnh báo', icon: Bell },

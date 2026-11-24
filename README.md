@@ -69,3 +69,14 @@ bị dừng, worker khác có thể nhận lại job khi lease 180 giây hết h
 Dependabot từ GitHub. PAT cần quyền đọc Contents, Secret scanning alerts và
 Dependabot alerts trên repo đã bật các tính năng tương ứng. Alert và lịch sử
 system được ghi cùng transaction; lỗi từ một nguồn sẽ rollback lần đồng bộ.
+
+
+## Integrated staging and full demo (24 November 2026)
+
+See [the full demo walkthrough](docs/demo-full.md) for a local fixture-based demonstration.
+
+Docker Compose combines MySQL 8, Redis 7 with AOF, FastAPI, push and initial-scan workers, React and the TLS 1.2/1.3 gateway. Run `docker compose up -d --build` after filling `.env` from `.env.example`. Backend migrations must complete before either worker starts. PDF requires DejaVu Sans, included in the backend image.
+
+Set unique `MYSQL_PASSWORD`, `MYSQL_ROOT_PASSWORD` and a 64-hex `GITPROTECT_AES_MASTER_KEY`. Generate an AES key with `python -c "import secrets; print(secrets.token_hex(32))"`. Set `TLS_CERT_DIR` to an absolute directory outside the repository containing your `staging.crt` and `staging.key`. Replace the old sample key if it was deployed; it was committed on a source branch and must not be trusted. Set the real HTTPS `GITHUB_WEBHOOK_CALLBACK_URL` for real GitHub onboarding. Ports bind to loopback because this internal MVP has no RBAC.
+
+The local demo and automated service tests were verified. Docker runtime deployment and synchronization of the five-tab Google Sheets dossier are still pending verification. The contributor report in `docs/pbi13-staging-acceptance-report.md` is historical, not proof of deployment.

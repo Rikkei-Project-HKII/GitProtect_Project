@@ -1,10 +1,9 @@
 from typing import Optional
-from fastapi import Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from redis.exceptions import RedisError
 from app.db.session import get_db
 from app.modules.engine import initial_scan
 from app.modules.engine.scan_alerts import repository, sync_native
-from fastapi import APIRouter, HTTPException, status
 from app.core.enums import SeverityEnum
 from app.modules.engine.schemas import (
     ScanJobTriggerResponse, ScanJobStatusResponse,
@@ -30,7 +29,7 @@ def trigger_scan(repo_id: int, db=Depends(get_db)):
         raise HTTPException(503, "Scan queue unavailable") from None
 
 @router.post("/scan/evaluate-text", response_model=EvaluateTextResponse, summary="Kiểm tra nhanh đoạn mã nguồn theo pipeline 3 lớp & 7 quy tắc (FR-06, FR-07, FR-08)")
-async def evaluate_text(req: EvaluateTextRequest):
+def evaluate_text(req: EvaluateTextRequest):
     try:
         return DetectionEngineService.evaluate_snippet(req.content, req.file_path)
     except TimeoutError:

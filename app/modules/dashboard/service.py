@@ -79,7 +79,9 @@ class DashboardService:
                 if _sev(sev) in SEVERITIES:
                     item[_sev(sev)] = int(cnt)
                     item["total"] += int(cnt)
-            items = sorted(repos.values(), key=lambda x: (-x["critical"], -x["high"], -x["total"]))
+            for item in repos.values():
+                item['risk_score'] = sum(item[s] * weight for s, weight in WEIGHTS.items())
+            items = sorted(repos.values(), key=lambda x: (-x['risk_score'], -x['critical'], -x['total']))
             return {"items": items}
         return _cached("dashboard:repo-breakdown", build)
 
