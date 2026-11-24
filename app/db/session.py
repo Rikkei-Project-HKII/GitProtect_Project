@@ -5,7 +5,7 @@ Database Session & Connection Engine Configuration
 
 import os
 from typing import Generator
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, URL
 from sqlalchemy.orm import sessionmaker, Session
 from app.core.config import settings
 
@@ -18,10 +18,10 @@ def get_database_url() -> str:
     env_url = os.getenv("DATABASE_URL")
     if env_url:
         return env_url
-    return (
-        f"mysql+pymysql://{settings.MYSQL_USER}:{settings.MYSQL_PASSWORD}"
-        f"@{settings.MYSQL_HOST}:{settings.MYSQL_PORT}/{settings.MYSQL_DB}?charset=utf8mb4"
-    )
+    return URL.create('mysql+pymysql', username=settings.MYSQL_USER,
+                      password=settings.MYSQL_PASSWORD, host=settings.MYSQL_HOST,
+                      port=settings.MYSQL_PORT, database=settings.MYSQL_DB,
+                      query={'charset': 'utf8mb4'}).render_as_string(hide_password=False)
 
 
 DATABASE_URL = get_database_url()

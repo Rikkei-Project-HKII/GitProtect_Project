@@ -1,0 +1,2015 @@
+{
+  "samples": 200,
+  "tp": 99,
+  "tn": 100,
+  "fp": 0,
+  "fn": 1,
+  "precision": 1.0,
+  "recall": 0.99,
+  "fpr": 0.0,
+  "f1": 0.9949748743718593,
+  "seconds": 0.026234800010570325,
+  "expected_rule_failures": 0,
+  "details": [
+    {
+      "id": "CASE-001",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-002",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-003",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-004",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-005",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-006",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-007",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-008",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-009",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-010",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-011",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-012",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-013",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-014",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-015",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-016",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-017",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-018",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-019",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-020",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-021",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-022",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-023",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-024",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-025",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-026",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-027",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-028",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-029",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-030",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-031",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-032",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-033",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-034",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-035",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-036",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-037",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-038",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-039",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-040",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-041",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-042",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-043",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-044",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-045",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-046",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-047",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-048",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-049",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-050",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-051",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-052",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-053",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-054",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-055",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-056",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-057",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-058",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-059",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-060",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-061",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-062",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-063",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-064",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-065",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-066",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-067",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-068",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-069",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-070",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-071",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-072",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-073",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-074",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-075",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-076",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-077",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-078",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-079",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-080",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-081",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-082",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-083",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-084",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-085",
+      "expected_rule": "RULE-01",
+      "actual_rules": [
+        "RULE-01"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-086",
+      "expected_rule": "RULE-02",
+      "actual_rules": [
+        "RULE-02"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-087",
+      "expected_rule": "RULE-03",
+      "actual_rules": [
+        "RULE-03"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-088",
+      "expected_rule": "RULE-04",
+      "actual_rules": [
+        "RULE-04"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-089",
+      "expected_rule": "RULE-05",
+      "actual_rules": [
+        "RULE-05"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-090",
+      "expected_rule": "RULE-06",
+      "actual_rules": [
+        "RULE-06"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-091",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-092",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-093",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-094",
+      "expected_rule": "RULE-07",
+      "actual_rules": [],
+      "outcome": "fn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-095",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-096",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-097",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-098",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-099",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-100",
+      "expected_rule": "RULE-07",
+      "actual_rules": [
+        "RULE-07"
+      ],
+      "outcome": "tp",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-101",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-102",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-103",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-104",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-105",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-106",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-107",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-108",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-109",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-110",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-111",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-112",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-113",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-114",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-115",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-116",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-117",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-118",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-119",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-120",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-121",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-122",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-123",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-124",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-125",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-126",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-127",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-128",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-129",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-130",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-131",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-132",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-133",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-134",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-135",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-136",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-137",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-138",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-139",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-140",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-141",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-142",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-143",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-144",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-145",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-146",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-147",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-148",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-149",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-150",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-151",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-152",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-153",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-154",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-155",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-156",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-157",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-158",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-159",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-160",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-161",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-162",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-163",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-164",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-165",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-166",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-167",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-168",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-169",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-170",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-171",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-172",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-173",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-174",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-175",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-176",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-177",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-178",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-179",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-180",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-181",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-182",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-183",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-184",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-185",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-186",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-187",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-188",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-189",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-190",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-191",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-192",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-193",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-194",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-195",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-196",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-197",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-198",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-199",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    },
+    {
+      "id": "CASE-200",
+      "expected_rule": "",
+      "actual_rules": [],
+      "outcome": "tn",
+      "rule_ok": true,
+      "masked": true,
+      "schema_ok": true
+    }
+  ],
+  "scope": "In-memory production ScanPipeline, synthetic dataset; not live GitHub-to-UI latency.",
+  "passed": true
+}

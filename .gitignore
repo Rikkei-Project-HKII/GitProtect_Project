@@ -1,9 +1,42 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+
+# Virtual environments
 venv/
+.venv/
+env/
+
+# Environment variables
 .env
+.env.local
+.env.*.local
+
+# Testing and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Frontend dependencies and builds
 node_modules/
+gitprotect_frontend/node_modules/
 dist/
+gitprotect_frontend/dist/
 .vite/
+gitprotect_frontend/.vite/
+
+# Logs and temporary databases
 *.log
+*.sqlite3
+*.db
+
+# Generated local demonstration reports and screenshots
+output/demo/
+
+# TLS private material must stay outside version control
+nginx/ssl/
+
+# Reproducible synthetic provider tokens are generated locally, never committed
+tests/benchmark_dataset_200.json

@@ -1,39 +1,38 @@
-from typing import Optional
-from fastapi import APIRouter, Query, Response
-from app.modules.dashboard.schemas import (
-    DashboardMetricsResponse, RepoBreakdownListResponse,
-    DashboardTrendResponse, AuthorAuditResponse
-)
-from app.modules.dashboard.service import DashboardService
-
-router = APIRouter(prefix="", tags=["MOD-04: Dashboard & Author Auditing"])
-
-@router.get("/audit/authors/{repo_id}", response_model=AuthorAuditResponse, summary="Kiểm toán danh tính tác giả commit & cảnh báo giả mạo email (FR-09)")
-async def audit_authors(repo_id: int, spoofing_only: bool = False):
-    return {
-        "repo_id": repo_id,
-        "allowed_email_domains": ["organization.vn"],
-        "total_commits_audited": 12,
-        "spoofing_violations_count": 1,
-        "items": []
-    }
-
-@router.get("/dashboard/export", summary="Xuất báo cáo tổng hợp tình trạng an ninh mã nguồn định dạng CSV hoặc PDF")
-async def export_report(format: str = Query("csv", pattern="^(csv|pdf)$")):
-    if format == "csv":
-        return Response(content="id,repo_name,rule_name,severity,secret_masked\n", media_type="text/csv")
-    return Response(content=b"%PDF-1.4 Mock Export Content", media_type="application/pdf")
-
-"""MOD-04 Dashboard router (S2-09a). Danh sách/chi tiết/lịch sử alert dùng lại API MOD-03."""
 from typing import Literal
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from sqlalchemy.orm import Session
 
 from app.db.session import get_db
-from app.modules.dashboard.schemas import MetricsResponse, RepoBreakdownResponse, TrendResponse
+from app.modules.dashboard.author_audit import report
+from app.modules.dashboard.schemas import (
+    AuthorAuditResponse,
+    MetricsResponse,
+    RepoBreakdownResponse,
+    TrendResponse,
+)
 from app.modules.dashboard.service import DashboardService
+from app.modules.dashboard.exports import collect_rows, csv_bytes, pdf_bytes
+from app.core.enums import SeverityEnum, AlertStatusEnum
+
+router = APIRouter(prefix="", tags=["MOD-04: Dashboard & Author Auditing"])
 
 
+@router.get("/audit/authors/{repo_id}", response_model=AuthorAuditResponse, summary="Kiểm toán danh tính tác giả commit & cảnh báo giả mạo email (FR-09)")
+def audit_authors(repo_id: int, spoofing_only: bool = False, page: int = Query(1, ge=1),
+                  page_size: int = Query(50, ge=1, le=100), db=Depends(get_db)):
+    return report(db, repo_id, spoofing_only, page, page_size)
+
+
+@router.get("/dashboard/export", summary="Xuất báo cáo tổng hợp tình trạng an ninh mã nguồn định dạng CSV hoặc PDF")
+def export_report(format: Literal['csv', 'pdf'] = 'csv', repo_id: int | None = Query(None, ge=1),
+                  severity: SeverityEnum | None = None, status: AlertStatusEnum | None = None,
+                  db: Session = Depends(get_db)):
+    rows = collect_rows(db, repo_id, severity.value if severity else None,
+                        status.value if status else None)
+    return Response(content=csv_bytes(rows) if format == 'csv' else pdf_bytes(rows),
+                    media_type='text/csv' if format == 'csv' else 'application/pdf',
+                    headers={'Content-Disposition': 'attachment; filename="gitprotect-security-report.' + format + '"',
+                             'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff'})
 
 
 @router.get("/dashboard/metrics", response_model=MetricsResponse, summary="KPI 4 mức độ nghiêm trọng (cache 60s)")

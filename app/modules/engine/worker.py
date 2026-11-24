@@ -4,8 +4,10 @@ import json
 import logging
 import re
 import time
+from time import perf_counter
 from contextlib import nullcontext
 
+from app.modules.dashboard.author_audit import record_identity
 from app.db.session import SessionLocal
 from app.modules.engine.initial_scan import redis_client as connect_redis
 from app.modules.engine.scan_alerts import repository, store_alert
@@ -14,6 +16,14 @@ from app.modules.engine.scan_pipeline import ScanPipeline
 QUEUE = "gitprotect:scan_queue"
 ACK = """
 if redis.call('LINDEX', KEYS[1], 0) == ARGV[1] then
+    return redis.call('LPOP', KEYS[1])
+end
+"""
+# Only acknowledge a timed-out job after its failure outcome is durable in Redis.
+# SQL has already rolled back, so partial findings cannot appear as a clean scan.
+FAIL_TIMEOUT = """
+if redis.call('LINDEX', KEYS[1], 0) == ARGV[1] then
+    redis.call('SET', KEYS[2], ARGV[2], 'EX', 86400)
     return redis.call('LPOP', KEYS[1])
 end
 """
@@ -70,19 +80,35 @@ class ScanQueueWorker:
             with (nullcontext(db) if db is not None else SessionLocal()) as session:
                 try:
                     repo = repository(session, job["repository_id"], lock=True)
+                    identity = job.get("commit_identity")
+                    author = record_identity(session, repo.id, job["commit_sha"], identity) if identity is not None else {}
                     pipeline = ScanPipeline()
+                    remaining_by_path = {}
                     inserted = 0
                     for path, start, content, added in hunks(job["diff"]):
-                        for f in pipeline.scan(content, path)["findings"]:
+                        budget = remaining_by_path.get(path, pipeline.regex_engine.timeout)
+                        started = perf_counter()
+                        findings = pipeline.scan(content, path, time_budget=budget)["findings"]
+                        remaining_by_path[path] = budget - (perf_counter() - started)
+                        if remaining_by_path[path] <= 0:
+                            raise TimeoutError("SCAN_TIMEOUT")
+                        for f in findings:
                             line = start + f["line_number"] - 1
                             if line not in added:
                                 continue
-                            fields = dict(source="gitprotect_scanner", commit_sha=job["commit_sha"],
+                            fields = dict(**author, source="gitprotect_scanner", commit_sha=job["commit_sha"],
                                           file_path=path, line_number=line, rule_name=f["rule_name"],
                                           severity=f["severity"], secret_masked=f["secret_masked"][:255])
                             inserted += store_alert(session, repo.id, ("push", job["commit_sha"], path,
                                                     line, f["rule_code"], f["secret_masked"]), fields)
                     session.commit()
+                except TimeoutError:
+                    session.rollback()
+                    failure = {"commit_sha": job["commit_sha"], "status": "failed",
+                               "error": "SCAN_TIMEOUT", "scan_complete": False}
+                    key = f"gitprotect:scan_timeout:{job['repository_id']}:{job['commit_sha']}"
+                    cache.eval(FAIL_TIMEOUT, 2, QUEUE, key, raw, json.dumps(failure))
+                    return failure
                 except Exception:
                     session.rollback()
                     raise

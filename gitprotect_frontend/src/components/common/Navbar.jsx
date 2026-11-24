@@ -12,6 +12,7 @@ export default function Navbar() {
         Internal Security Operations Dashboard
       </p>
       <nav className="flex items-center gap-2 text-sm">
+        {import.meta.env.VITE_DEMO_MODE === 'true' && <NavLink to="/demo" className="px-2 py-1 font-medium text-teal-700">Demo</NavLink>}
         <NavLink to="/" className="px-2 py-1 text-slate-600 hover:text-emerald-700 md:hidden">
           Dashboard
         </NavLink>

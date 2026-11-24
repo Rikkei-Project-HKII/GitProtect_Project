@@ -1,17 +1,169 @@
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: gitprotect_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_USER: ${MYSQL_USER:-gitprotect}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+    volumes:
+      - mysql_staging_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -p$${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - gitprotect_net
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    container_name: gitprotect_redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_staging_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+    networks:
+      - gitprotect_net
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gitprotect_backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      GITPROTECT_AES_MASTER_KEY: ${GITPROTECT_AES_MASTER_KEY:?Set a random AES key in .env}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_DB: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_USER: ${MYSQL_USER:-gitprotect}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      GITHUB_WEBHOOK_CALLBACK_URL: ${GITHUB_WEBHOOK_CALLBACK_URL:-https://localhost/api/v1/webhooks/github}
+      ALLOWED_EMAIL_DOMAINS: ${ALLOWED_EMAIL_DOMAINS:-organization.vn,gitprotect.io}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/', timeout=3)"]
+      interval: 5s
+      timeout: 4s
+      retries: 20
+    expose:
+      - "8000"
+    networks:
+      - gitprotect_net
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gitprotect_worker
+    restart: unless-stopped
+    command: ["python", "-m", "app.modules.engine.worker"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    environment:
+      GITPROTECT_AES_MASTER_KEY: ${GITPROTECT_AES_MASTER_KEY:?Set a random AES key in .env}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_DB: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_USER: ${MYSQL_USER:-gitprotect}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      GITHUB_WEBHOOK_CALLBACK_URL: ${GITHUB_WEBHOOK_CALLBACK_URL:-https://localhost/api/v1/webhooks/github}
+      ALLOWED_EMAIL_DOMAINS: ${ALLOWED_EMAIL_DOMAINS:-organization.vn,gitprotect.io}
+    networks:
+      - gitprotect_net
+
+  initial_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gitprotect_initial_worker
+    restart: unless-stopped
+    command: ["python", "-m", "app.modules.engine.initial_scan"]
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      backend:
+        condition: service_healthy
+    environment:
+      GITPROTECT_AES_MASTER_KEY: ${GITPROTECT_AES_MASTER_KEY:?Set a random AES key in .env}
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_DB: ${MYSQL_DATABASE:-gitprotect}
+      MYSQL_USER: ${MYSQL_USER:-gitprotect}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      GITHUB_WEBHOOK_CALLBACK_URL: ${GITHUB_WEBHOOK_CALLBACK_URL:-https://localhost/api/v1/webhooks/github}
+      ALLOWED_EMAIL_DOMAINS: ${ALLOWED_EMAIL_DOMAINS:-organization.vn,gitprotect.io}
+    networks:
+      - gitprotect_net
+
   frontend:
     build:
       context: ./gitprotect_frontend
       dockerfile: Dockerfile
+    container_name: gitprotect_frontend
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    expose:
+      - "80"
+    networks:
+      - gitprotect_net
+
+  nginx:
+    image: nginx:alpine
+    container_name: gitprotect_nginx
+    restart: unless-stopped
     ports:
-      - "5173:5173"
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
     volumes:
-      - ./gitprotect_frontend:/app
-      - frontend_node_modules:/app/node_modules
-    environment:
-      VITE_PROXY_TARGET: http://host.docker.internal:8000
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ${TLS_CERT_DIR:?Set TLS_CERT_DIR to an external certificate directory}:/etc/nginx/ssl:ro
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - gitprotect_net
 
 volumes:
-  frontend_node_modules:
+  mysql_staging_data:
+  redis_staging_data:
+
+networks:
+  gitprotect_net:
+    driver: bridge
