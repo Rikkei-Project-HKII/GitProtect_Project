@@ -50,7 +50,7 @@ return 1
 
 def redis_client():
     return Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True,
-                 socket_connect_timeout=3, socket_timeout=5, protocol=2)
+                 socket_connect_timeout=3, socket_timeout=5)
 
 
 def status(redis, job_id):
