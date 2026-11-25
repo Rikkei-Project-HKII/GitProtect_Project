@@ -14,7 +14,6 @@ from sqlalchemy import select
 from app.core.config import settings
 from app.core.security import crypto_service
 from app.models.repository import Repository
-from app.modules.dashboard.author_audit import commit_identity
 from app.modules.ingestion.github_client import GitHubClient
 
 
@@ -38,7 +37,7 @@ class DeliveryDedupService:
         key = f"gitprotect:delivery:{repo.github_repo_id}:{delivery}"
         try:
             async with Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT,
-                             socket_connect_timeout=2, socket_timeout=2) as redis:
+                             socket_connect_timeout=2, socket_timeout=2, protocol=2) as redis:
                 if await redis.exists(key):
                     return False
                 # Bound concurrency and reuse the HTTP connection pool. If any diff
@@ -49,15 +48,12 @@ class DeliveryDedupService:
 
                     async def fetch_job(sha):
                         async with semaphore:
-                            path = f"/repos/{repo.repo_name}/commits/{sha}"
-                            metadata = await client.request("GET", path)
-                            identity = commit_identity(metadata, sha)
                             diff = await client.request(
-                                "GET", path,
+                                "GET", f"/repos/{repo.repo_name}/commits/{sha}",
                                 headers={"Accept": "application/vnd.github.diff"})
                         return json.dumps(dict(
                             repository_id=repo.id, commit_sha=sha, ref=ref,
-                            delivery_id=delivery, diff=diff, commit_identity=identity,
+                            delivery_id=delivery, diff=diff,
                             actor_type="system", actor_label="system"))
 
                     tasks = [asyncio.create_task(fetch_job(sha)) for sha in commits]

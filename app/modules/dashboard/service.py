@@ -18,7 +18,7 @@ OPEN_STATUSES = (AlertStatusEnum.OPEN.value, AlertStatusEnum.IN_REVIEW.value)
 WEIGHTS = {"critical": 10, "high": 5, "medium": 2, "low": 1}  # TODO: chỉnh theo công thức Risk Score trong SRS
 
 _redis = redis.Redis(host=settings.REDIS_HOST, port=settings.REDIS_PORT, decode_responses=True,
-                     socket_connect_timeout=1, socket_timeout=1)
+                     socket_connect_timeout=1, socket_timeout=1, protocol=2)
 
 
 def _sev(v) -> str:
@@ -79,9 +79,7 @@ class DashboardService:
                 if _sev(sev) in SEVERITIES:
                     item[_sev(sev)] = int(cnt)
                     item["total"] += int(cnt)
-            for item in repos.values():
-                item['risk_score'] = sum(item[s] * weight for s, weight in WEIGHTS.items())
-            items = sorted(repos.values(), key=lambda x: (-x['risk_score'], -x['critical'], -x['total']))
+            items = sorted(repos.values(), key=lambda x: (-x["critical"], -x["high"], -x["total"]))
             return {"items": items}
         return _cached("dashboard:repo-breakdown", build)
 
